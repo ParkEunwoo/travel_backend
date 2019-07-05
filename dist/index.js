@@ -1,6 +1,11 @@
-const express = require('express');
-const app = new express();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express = require("express");
+const app = express();
+app.get('/', (req, res) => {
+    res.send('hello world!');
+});
 app.listen(3000, () => {
-    console.log('listening to port 3000');
+    console.log('listening on port 3000');
 });
 //# sourceMappingURL=index.js.map
