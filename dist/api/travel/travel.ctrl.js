@@ -10,10 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const Users = require('../../models/users');
 exports.myList = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    console.log("여기에 왔따.");
-    console.log(req.body);
     const { token } = req.body;
-    console.log(token);
     yield Users.findOne({ token }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
@@ -24,7 +21,48 @@ exports.myList = (req, res) => __awaiter(this, void 0, void 0, function* () {
         }
     }).exec();
 });
+exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const { token, place, start_date, end_date, category } = req.body;
+    const records = {
+        place,
+        start_date,
+        end_date,
+        category,
+        views: 0,
+        daily: null
+    };
+    yield Users.findOneAndUpdate({ token }, { $push: { records } }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
+        else {
+            res.status(200).json(output.records);
+        }
+    }).exec();
+});
 /*
+exports.regist = async (req, res) => {
+    const { week, title, content } = req.body;
+    const _id = req.params.id;
+    const activity = {
+        week,
+        title,
+        content,
+        date: new Date()
+    }
+    if(leader){
+        await Recruitment.findOneAndUpdate({_id}, {$addToSet:{activity}}, (err, user) => {
+            if(err) res.status(500).json({error: err});
+            if(!user) res.status(404).json({error: 'Not Found'});
+            else res.status(200).json(user);
+        }).exec();
+        
+    }
+    else{
+        res.json({login: '로그인안됨'});
+    }
+};
 exports.statusMember = async (req: express.Request, res: express.Response) => {
    
     const number = req.params.id;

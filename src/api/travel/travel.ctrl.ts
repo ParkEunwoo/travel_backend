@@ -2,10 +2,8 @@ import * as express from 'express';
 const Users = require('../../models/users');
 
 exports.myList = async (req: express.Request, res: express.Response) => {
-    console.log("여기에 왔따.");
-    console.log(req.body);
     const { token } = req.body;
-    console.log(token);
+    
     await Users.findOne({token}, (err, output) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({erro: 'Not Found'});
@@ -14,7 +12,49 @@ exports.myList = async (req: express.Request, res: express.Response) => {
         }
     }).exec();
 }
+
+exports.addTravel = async (req: express.Request, res: express.Response) => {
+    const { token, place, start_date, end_date, category} = req.body;
+    const records = {
+        place,
+        start_date,
+        end_date,
+        category,
+        views: 0,
+        daily: null
+    };
+    
+    await Users.findOneAndUpdate({token}, {$push:{records}}, (err, output) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else {
+            res.status(200).json(output.records);
+        }
+    }).exec();
+
+}
 /*
+exports.regist = async (req, res) => {
+    const { week, title, content } = req.body;
+    const _id = req.params.id;
+    const activity = {
+        week,
+        title,
+        content,
+        date: new Date()
+    }
+    if(leader){
+        await Recruitment.findOneAndUpdate({_id}, {$addToSet:{activity}}, (err, user) => {
+            if(err) res.status(500).json({error: err});
+            if(!user) res.status(404).json({error: 'Not Found'});
+            else res.status(200).json(user);
+        }).exec();
+        
+    }
+    else{
+        res.json({login: '로그인안됨'});
+    }
+};
 exports.statusMember = async (req: express.Request, res: express.Response) => {
    
     const number = req.params.id;
