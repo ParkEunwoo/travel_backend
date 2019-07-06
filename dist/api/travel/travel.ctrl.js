@@ -41,6 +41,11 @@ exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
         }
     }).exec();
 });
+exports.imageTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    res.json("성공?!?");
+});
+exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () {
+});
 /*
 exports.regist = async (req, res) => {
     const { week, title, content } = req.body;

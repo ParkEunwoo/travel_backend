@@ -1,4 +1,5 @@
 import * as express from 'express';
+
 const Users = require('../../models/users');
 
 exports.myList = async (req: express.Request, res: express.Response) => {
@@ -32,6 +33,13 @@ exports.addTravel = async (req: express.Request, res: express.Response) => {
         }
     }).exec();
 
+}
+
+exports.imageTest = async (req: express.Request, res: express.Response) => {
+    res.json("성공?!?");
+}
+
+exports.writeDaily = async (req: express.Request, res: express.Response) => {
 }
 /*
 exports.regist = async (req, res) => {
