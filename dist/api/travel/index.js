@@ -10,14 +10,10 @@ const storage = multer.diskStorage({
         callback(null, 'lib/travel');
     },
     filename: (req, file, callback) => {
-        file.uploadedFile = {
-            name: "1111",
-            ext: file.mimetype.split('/')[1]
-        };
-        callback(null, file.uploadedFile.name + '.' + file.uploadedFile.ext);
+        callback(null, new Date().valueOf() + '.' + file.mimetype.split('/')[1]);
     }
 });
-const upload = multer({ storage: storage }).array('files', 30);
+const upload = multer({ storage }).array('files', 30);
 travel.get('/', travelCtrl.myList);
 travel.post('/', travelCtrl.addTravel);
 travel.post('/:id/daily/:day', travelCtrl.writeDaily);

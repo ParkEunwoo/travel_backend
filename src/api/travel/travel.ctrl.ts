@@ -35,7 +35,31 @@ exports.addTravel = async (req: express.Request, res: express.Response) => {
 
 }
 
-exports.imageTest = async (req: express.Request, res: express.Response) => {
+export interface MulterFile {
+    path: string // Available using `DiskStorage`.
+    mimetype: string
+    originalname: string
+    size: number
+    fieldname: string
+    encoding: string
+    destination: string
+    filename: string
+}
+
+exports.imageTest = async (req: express.Request & {files: MulterFile}, res: express.Response) => {
+    const exif = require('exif-parser');
+    const fs = require('fs');
+    const buffer = fs.readFileSync(__dirname+'/../../../'+req.files[0].path.replace(/\\/g, '/'));
+    console.log(buffer);
+    console.log("--------------------------");
+    const parser = exif.create(buffer);
+    console.log(parser);
+    console.log("--------------------------");
+    const result = parser.parse();
+    console.log(result);
+
+    console.log(JSON.stringify(result, null, 2));
+    
     res.json("성공?!?");
 }
 

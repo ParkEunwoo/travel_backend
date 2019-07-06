@@ -42,6 +42,17 @@ exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
     }).exec();
 });
 exports.imageTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const exif = require('exif-parser');
+    const fs = require('fs');
+    const buffer = fs.readFileSync(__dirname + '/../../../' + req.files[0].path.replace(/\\/g, '/'));
+    console.log(buffer);
+    console.log("--------------------------");
+    const parser = exif.create(buffer);
+    console.log(parser);
+    console.log("--------------------------");
+    const result = parser.parse();
+    console.log(result);
+    console.log(JSON.stringify(result, null, 2));
     res.json("성공?!?");
 });
 exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () {
