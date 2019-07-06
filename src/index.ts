@@ -1,5 +1,9 @@
 import * as express from 'express';
+
 const app = express();
+
+app.use(express.json());
+app.use('/api', require('./api'));
 
 app.get('/', (req: express.Request, res: express.Response) => {
     res.send('hello world!');
