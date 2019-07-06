@@ -1,5 +1,5 @@
 import * as express from 'express';
-import travelCtrl from './travel.ctrl';
+const travelCtrl = require('./travel.ctrl');
 
 const travel = express.Router();
 

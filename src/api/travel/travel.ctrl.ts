@@ -1,7 +1,18 @@
 import * as express from 'express';
-const Recruitment = require('models/recruitment');
+const Users = require('models/users');
 
-exports.statusMember = async (req: express.Request, res: Express.Response) => {
+exports.myList = async (req: express.Request, res: express.Response) => {
+    const { token } = req.params;
+    await Users.find({token}, (err, output) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({erro: 'Not Found'});
+        else{
+            res.status(200).json(output.travel);
+        }
+    }).exec();
+}
+/*
+exports.statusMember = async (req: express.Request, res: express.Response) => {
    
     const number = req.params.id;
 
@@ -76,3 +87,4 @@ exports.week = async (req, res) => {
 
 };
 
+*/
