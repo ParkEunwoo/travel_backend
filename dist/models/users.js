@@ -2,30 +2,44 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const Member = new Schema({
+const Profile = new Schema({
+    image: {
+        path: String,
+        width: Number,
+        height: Number
+    }
+});
+const Friend = new Schema({
+    friend_id: String
+});
+const Image = new Schema({
+    path: String,
+    width: Number,
+    height: Number,
+    time: String,
+    latitude: Number,
+    longitude: Number
+});
+const Spot = new Schema([{
+        images: [Image],
+        latitude: Number,
+        longitude: Number,
+        content: String
+    }]);
+const Record = new Schema({
+    place: String,
+    start_date: String,
+    end_date: String,
+    category: String,
+    views: Number,
+    daily: [Spot]
+});
+const Users = new Schema({
+    token: String,
     name: String,
-    number: Number,
-    phone: String
+    profile: Profile,
+    friends: [Friend],
+    records: [Record]
 });
-const Activity = new Schema({
-    week: Number,
-    title: String,
-    content: String,
-    date: Date
-});
-const Recruitment = new Schema({
-    type: String,
-    title: String,
-    leader: String,
-    explain: String,
-    period: {
-        startDate: String,
-        endDate: String
-    },
-    recruitNum: Number,
-    joinNum: Number,
-    member: [Member],
-    activity: [Activity]
-});
-module.exports = mongoose.model('Recruitment', Recruitment);
+module.exports = mongoose.model('Users', Users);
 //# sourceMappingURL=users.js.map

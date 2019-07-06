@@ -9,6 +9,6 @@ travel.get('/', (req: express.Request, res: express.Response) => {
     res.send('/api/travel');
 });
 */
-travel.get('/', travelCtrl.mylist);
+travel.get('/', travelCtrl.myList);
 
 module.exports = travel;

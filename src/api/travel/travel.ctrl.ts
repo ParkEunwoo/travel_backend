@@ -1,13 +1,16 @@
 import * as express from 'express';
-const Users = require('models/users');
+const Users = require('../../models/users');
 
 exports.myList = async (req: express.Request, res: express.Response) => {
-    const { token } = req.params;
-    await Users.find({token}, (err, output) => {
+    console.log("여기에 왔따.");
+    console.log(req.body);
+    const { token } = req.body;
+    console.log(token);
+    await Users.findOne({token}, (err, output) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({erro: 'Not Found'});
         else{
-            res.status(200).json(output.travel);
+            res.status(200).json(output.records);
         }
     }).exec();
 }

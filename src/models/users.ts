@@ -19,14 +19,14 @@ const Image = new Schema({
     width: Number,
     height: Number,
     time: String,
-    latitude: Float64Array,
-    longitude: Float64Array
+    latitude: Number,
+    longitude: Number
 });
 
 const Spot = new Schema([{
     images: [Image],
-    latitude: Float64Array,
-    longitude: Float64Array,
+    latitude: Number,
+    longitude: Number,
     content: String
 }]);
 
@@ -44,7 +44,7 @@ const Users = new Schema({
     name : String,
     profile : Profile,
     friends : [Friend],
-    record : Record
+    records : [Record]
 });
 
 module.exports = mongoose.model('Users', Users);
