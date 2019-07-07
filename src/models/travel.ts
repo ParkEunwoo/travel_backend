@@ -8,13 +8,18 @@ const Image = new Schema({
     ext: String
 });
 
-const Spot = new Schema([{
+const Spot = new Schema({
     images: [Image],
     latitude: Number,
     longitude: Number,
     time: String,
     content: String
-}]);
+});
+
+const Spots = new Schema({
+    day: Number,
+    spots: [Spot]
+});
 
 const Travels = new Schema({
 	user_id : String,
@@ -24,7 +29,7 @@ const Travels = new Schema({
     end_date: String,
     category: String,
     views: Number,
-    daily: [Spot]
+    daily: [Spots]
 });
 
 module.exports = mongoose.model('Travels', Travels);

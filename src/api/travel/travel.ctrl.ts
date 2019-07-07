@@ -25,8 +25,9 @@ exports.addTravel = async (req: express.Request, res: express.Response) => {
         end_date,
         category,
         views: 0,
-        daily: null
+        daily: []
     });
+
     await travel.save((err: any) => {
         if(err) {
             res.status(500).json({error: err});
@@ -54,16 +55,17 @@ exports.imageTest = async (req: express.Request & {files: MulterFile}, res: expr
 
 exports.writeDaily = async (req: express.Request & {images: MulterFile}, res: express.Response) => {
     //const { images } = req;
-    const { token, spot } = req.body;
-    const id = req.params.id;
-    //const { id, day } = req.params;
-    
-    console.log(token, id);
-    await Travels.findOneAndUpdate({token, records:  {$elemMatch: { "_id": id } }}, {$push:{spot}}, {records:  {$elemMatch: { "_id": id } }},(err: any, output: any) => {
+    const { user_id, spots } = req.body;
+    const { id, day } = req.params;
+    const daily = {
+        day,
+        spots
+    };
+
+    await Travels.findOneAndUpdate({user_id, _id: id}, {$addToSet:{daily}}, (err: any, output: any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else {
-            console.log(output);
             res.status(200).json(output);
         }
     }).exec();

@@ -7,13 +7,17 @@ const Image = new Schema({
     name: String,
     ext: String
 });
-const Spot = new Schema([{
-        images: [Image],
-        latitude: Number,
-        longitude: Number,
-        time: String,
-        content: String
-    }]);
+const Spot = new Schema({
+    images: [Image],
+    latitude: Number,
+    longitude: Number,
+    time: String,
+    content: String
+});
+const Spots = new Schema({
+    day: Number,
+    spots: [Spot]
+});
 const Travels = new Schema({
     user_id: String,
     name: String,
@@ -22,7 +26,7 @@ const Travels = new Schema({
     end_date: String,
     category: String,
     views: Number,
-    daily: [Spot]
+    daily: [Spots]
 });
 module.exports = mongoose.model('Travels', Travels);
 //# sourceMappingURL=travel.js.map

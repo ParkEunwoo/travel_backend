@@ -31,7 +31,7 @@ exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
         end_date,
         category,
         views: 0,
-        daily: null
+        daily: []
     });
     yield travel.save((err) => {
         if (err) {
@@ -46,17 +46,18 @@ exports.imageTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
 });
 exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () {
     //const { images } = req;
-    const { token, spot } = req.body;
-    const id = req.params.id;
-    //const { id, day } = req.params;
-    console.log(token, id);
-    yield Travels.findOneAndUpdate({ token, records: { $elemMatch: { "_id": id } } }, { $push: { spot } }, { records: { $elemMatch: { "_id": id } } }, (err, output) => {
+    const { user_id, spots } = req.body;
+    const { id, day } = req.params;
+    const daily = {
+        day,
+        spots
+    };
+    yield Travels.findOneAndUpdate({ user_id, _id: id }, { $addToSet: { daily } }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
         if (!output)
             res.status(404).json({ error: 'Not Found' });
         else {
-            console.log(output);
             res.status(200).json(output);
         }
     }).exec();

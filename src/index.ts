@@ -13,7 +13,7 @@ mongoose.Promise = global.Promise;
 mongoose.connect(mongoURI).then(() => {
     console.log(mongoURI);
     console.log('connnected to mongodb');
-}).catch((e) => {
+}).catch((e: any) => {
     console.error(e);
 });
 
