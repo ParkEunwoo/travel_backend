@@ -1,38 +1,38 @@
 import * as express from 'express';
 
-const Users = require('../../models/users');
+const Travels = require('../../models/travel');
 
 exports.myList = async (req: express.Request, res: express.Response) => {
-    const { token } = req.body;
+    const { user_id } = req.body;
     
-    await Users.findOne({token}, (err, output) => {
+    await Travels.find({user_id}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({erro: 'Not Found'});
         else{
-            res.status(200).json(output.records);
+            res.status(200).json(output);
         }
     }).exec();
 }
 
 exports.addTravel = async (req: express.Request, res: express.Response) => {
-    const { token, place, start_date, end_date, category} = req.body;
-    const records = {
+    const { user_id, name, place, start_date, end_date, category} = req.body;
+    
+    const travel = new Travels({
+        user_id,
+        name,
         place,
         start_date,
         end_date,
         category,
         views: 0,
         daily: null
-    };
-    
-    await Users.findOneAndUpdate({token}, {$push:{records}}, (err, output) => {
-        if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: 'Not Found'});
-        else {
-            res.status(200).json(output.records);
+    });
+    await travel.save((err: any) => {
+        if(err) {
+            res.status(500).json({error: err});
         }
-    }).exec();
-
+    });
+    res.json({"success":true});
 }
 
 export interface MulterFile {
@@ -54,13 +54,12 @@ exports.imageTest = async (req: express.Request & {files: MulterFile}, res: expr
 
 exports.writeDaily = async (req: express.Request & {images: MulterFile}, res: express.Response) => {
     //const { images } = req;
-    //const { token, spot } = req.body;
-    const token = req.body.token;
+    const { token, spot } = req.body;
     const id = req.params.id;
     //const { id, day } = req.params;
     
     console.log(token, id);
-    await Users.findOne({token}, {records:  {$elemMatch: { "_id": id } }},(err, output) => {
+    await Travels.findOneAndUpdate({token, records:  {$elemMatch: { "_id": id } }}, {$push:{spot}}, {records:  {$elemMatch: { "_id": id } }},(err: any, output: any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else {
@@ -72,6 +71,23 @@ exports.writeDaily = async (req: express.Request & {images: MulterFile}, res: ex
 
 }
 /*
+
+exports.signup = async (req, res) => {
+    const { name, number, id, password, phone } = req.body;
+
+    const user = new User({
+        name, number, id, password, phone,
+        rank: 0,
+    });
+    console.log(user);
+    await user.save((err) => {
+        if(err) {
+            res.status(500).json({error: err});
+        }
+    });
+    res.json({"success":true});
+};
+
 exports.regist = async (req, res) => {
     const { week, title, content } = req.body;
     const _id = req.params.id;

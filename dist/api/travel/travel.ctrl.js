@@ -8,38 +8,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Users = require('../../models/users');
+const Travels = require('../../models/travel');
 exports.myList = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const { token } = req.body;
-    yield Users.findOne({ token }, (err, output) => {
+    const { user_id } = req.body;
+    yield Travels.find({ user_id }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
         if (!output)
             res.status(404).json({ erro: 'Not Found' });
         else {
-            res.status(200).json(output.records);
+            res.status(200).json(output);
         }
     }).exec();
 });
 exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const { token, place, start_date, end_date, category } = req.body;
-    const records = {
+    const { user_id, name, place, start_date, end_date, category } = req.body;
+    const travel = new Travels({
+        user_id,
+        name,
         place,
         start_date,
         end_date,
         category,
         views: 0,
         daily: null
-    };
-    yield Users.findOneAndUpdate({ token }, { $push: { records } }, (err, output) => {
-        if (err)
+    });
+    yield travel.save((err) => {
+        if (err) {
             res.status(500).json({ error: err });
-        if (!output)
-            res.status(404).json({ error: 'Not Found' });
-        else {
-            res.status(200).json(output.records);
         }
-    }).exec();
+    });
+    res.json({ "success": true });
 });
 exports.imageTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
     console.log(req.files[0].filename);
@@ -47,12 +46,11 @@ exports.imageTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
 });
 exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () {
     //const { images } = req;
-    //const { token, spot } = req.body;
-    const token = req.body.token;
+    const { token, spot } = req.body;
     const id = req.params.id;
     //const { id, day } = req.params;
     console.log(token, id);
-    yield Users.findOne({ token }, { records: { $elemMatch: { "_id": id } } }, (err, output) => {
+    yield Travels.findOneAndUpdate({ token, records: { $elemMatch: { "_id": id } } }, { $push: { spot } }, { records: { $elemMatch: { "_id": id } } }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
         if (!output)
@@ -64,6 +62,23 @@ exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () 
     }).exec();
 });
 /*
+
+exports.signup = async (req, res) => {
+    const { name, number, id, password, phone } = req.body;
+
+    const user = new User({
+        name, number, id, password, phone,
+        rank: 0,
+    });
+    console.log(user);
+    await user.save((err) => {
+        if(err) {
+            res.status(500).json({error: err});
+        }
+    });
+    res.json({"success":true});
+};
+
 exports.regist = async (req, res) => {
     const { week, title, content } = req.body;
     const _id = req.params.id;
