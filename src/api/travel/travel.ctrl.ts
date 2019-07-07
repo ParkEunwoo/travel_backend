@@ -47,23 +47,29 @@ export interface MulterFile {
 }
 
 exports.imageTest = async (req: express.Request & {files: MulterFile}, res: express.Response) => {
-    const exif = require('exif-parser');
-    const fs = require('fs');
-    const buffer = fs.readFileSync(__dirname+'/../../../'+req.files[0].path.replace(/\\/g, '/'));
-    console.log(buffer);
-    console.log("--------------------------");
-    const parser = exif.create(buffer);
-    console.log(parser);
-    console.log("--------------------------");
-    const result = parser.parse();
-    console.log(result);
-
-    console.log(JSON.stringify(result, null, 2));
+    console.log(req.files[0].filename);
     
     res.json("성공?!?");
 }
 
-exports.writeDaily = async (req: express.Request, res: express.Response) => {
+exports.writeDaily = async (req: express.Request & {images: MulterFile}, res: express.Response) => {
+    //const { images } = req;
+    //const { token, spot } = req.body;
+    const token = req.body.token;
+    const id = req.params.id;
+    //const { id, day } = req.params;
+    
+    console.log(token, id);
+    await Users.findOne({token}, {records:  {$elemMatch: { "_id": id } }},(err, output) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else {
+            console.log(output);
+            res.status(200).json(output);
+        }
+    }).exec();
+
+
 }
 /*
 exports.regist = async (req, res) => {

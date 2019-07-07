@@ -27,6 +27,7 @@ const Spot = new Schema([{
     images: [Image],
     latitude: Number,
     longitude: Number,
+    time: String,
     content: String
 }]);
 

@@ -42,20 +42,26 @@ exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
     }).exec();
 });
 exports.imageTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const exif = require('exif-parser');
-    const fs = require('fs');
-    const buffer = fs.readFileSync(__dirname + '/../../../' + req.files[0].path.replace(/\\/g, '/'));
-    console.log(buffer);
-    console.log("--------------------------");
-    const parser = exif.create(buffer);
-    console.log(parser);
-    console.log("--------------------------");
-    const result = parser.parse();
-    console.log(result);
-    console.log(JSON.stringify(result, null, 2));
+    console.log(req.files[0].filename);
     res.json("성공?!?");
 });
 exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    //const { images } = req;
+    //const { token, spot } = req.body;
+    const token = req.body.token;
+    const id = req.params.id;
+    //const { id, day } = req.params;
+    console.log(token, id);
+    yield Users.findOne({ token }, { records: { $elemMatch: { "_id": id } } }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
+        else {
+            console.log(output);
+            res.status(200).json(output);
+        }
+    }).exec();
 });
 /*
 exports.regist = async (req, res) => {
