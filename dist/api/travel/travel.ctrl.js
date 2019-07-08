@@ -53,8 +53,27 @@ exports.imageTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
     res.json("성공?!?");
 });
 exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    //const { images } = req;
-    const { user_id, spots } = req.body;
+    const files = req.files;
+    /*
+    const { spot_length } = req.body;
+    const spot = spot_length.split(',').map(Number);
+    console.log(spot);
+    console.log(files);
+    
+*/
+    const images = files.map((value) => {
+        return {
+            path: value.path,
+            name: value.filename.split('.')[0],
+            ext: value.filename.split('.')[1]
+        };
+    });
+    const { user_id, spots, length } = req.body;
+    let sum = 0;
+    spots.forEach((value, index) => {
+        value.images = images.slice(sum, sum += length[index]);
+    });
+    console.log(spots);
     const { id, day } = req.params;
     const daily = {
         day,

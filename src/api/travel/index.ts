@@ -9,18 +9,18 @@ travel.use(express.json());
 
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, 'lib/travel/'+req.body.token)
+        callback(null, 'lib/travel/' + req.params.id);
     },
     filename: (req, file, callback) => {
         callback(null, new Date().valueOf()+'.'+file.mimetype.split('/')[1]);
     }
 });
 
-const upload = multer({ storage }).array('images', 30);
+const upload = multer({ storage }).array('files', 30);
 
 travel.get('/', travelCtrl.myList);
 travel.post('/', travelCtrl.addTravel);
-travel.post('/:id/daily/:day', travelCtrl.writeDaily);
+travel.post('/:id/daily/:day', upload, travelCtrl.writeDaily);
 travel.post('/image', upload, travelCtrl.imageTest);
 
 module.exports = travel;

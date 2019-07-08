@@ -18,7 +18,7 @@ exports.myList = async (req: express.Request, res: express.Response) => {
 exports.addTravel = async (req: express.Request, res: express.Response) => {
     const { user_id, name, place, start_date, end_date, category} = req.body;
 
-    await Travels.create({ 
+    await Travels.create({
         user_id,
         name,
         place,
@@ -55,9 +55,29 @@ exports.imageTest = async (req: express.Request & {files: MulterFile}, res: expr
     res.json("성공?!?");
 }
 
-exports.writeDaily = async (req: express.Request & {images: MulterFile}, res: express.Response) => {
-    //const { images } = req;
-    const { user_id, spots } = req.body;
+exports.writeDaily = async (req: any, res: express.Response) => {
+    const files = req.files;
+    /*
+    const { spot_length } = req.body;
+    const spot = spot_length.split(',').map(Number);
+    console.log(spot);
+    console.log(files);
+    
+*/
+    const images = files.map((value) => {
+        return {
+            path: value.path,
+            name: value.filename.split('.')[0],
+            ext: value.filename.split('.')[1]
+        }
+    });
+    
+    const { user_id, spots, length } = req.body;
+    let sum = 0;
+    spots.forEach((value, index) => {
+        value.images = images.slice(sum, sum+=length[index]);
+    });
+    console.log(spots);
     const { id, day } = req.params;
     const daily = {
         day,
