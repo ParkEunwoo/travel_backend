@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
 const Travels = require('../../models/travel');
 exports.myList = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const { user_id } = req.body;
@@ -23,7 +24,7 @@ exports.myList = (req, res) => __awaiter(this, void 0, void 0, function* () {
 });
 exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const { user_id, name, place, start_date, end_date, category } = req.body;
-    const travel = new Travels({
+    yield Travels.create({
         user_id,
         name,
         place,
@@ -32,13 +33,20 @@ exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
         category,
         views: 0,
         daily: []
-    });
-    yield travel.save((err) => {
-        if (err) {
+    }, (err, output) => {
+        if (err)
             res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: "Error" });
+        else {
+            res.status(200).json(output);
+            fs.mkdir(__dirname + '/../../../lib/travel/' + output._id, { recursive: true }, (err) => {
+                if (err) {
+                    throw err;
+                }
+            });
         }
     });
-    res.json({ "success": true });
 });
 exports.imageTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
     console.log(req.files[0].filename);

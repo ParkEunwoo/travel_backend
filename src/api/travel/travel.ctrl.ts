@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as fs from 'fs';
 
 const Travels = require('../../models/travel');
 
@@ -16,8 +17,8 @@ exports.myList = async (req: express.Request, res: express.Response) => {
 
 exports.addTravel = async (req: express.Request, res: express.Response) => {
     const { user_id, name, place, start_date, end_date, category} = req.body;
-    
-    const travel = new Travels({
+
+    await Travels.create({ 
         user_id,
         name,
         place,
@@ -25,15 +26,16 @@ exports.addTravel = async (req: express.Request, res: express.Response) => {
         end_date,
         category,
         views: 0,
-        daily: []
-    });
-
-    await travel.save((err: any) => {
-        if(err) {
-            res.status(500).json({error: err});
+        daily: []}, (err:any, output: any) => {
+        if (err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: "Error"});
+        else {
+            res.status(200).json(output);
+            fs.mkdir(__dirname+'/../../../lib/travel/'+output._id, { recursive: true }, (err) => {
+                if (err) { throw err; }
+            });
         }
     });
-    res.json({"success":true});
 }
 
 export interface MulterFile {
@@ -69,7 +71,6 @@ exports.writeDaily = async (req: express.Request & {images: MulterFile}, res: ex
             res.status(200).json(output);
         }
     }).exec();
-
 
 }
 /*
