@@ -22,5 +22,6 @@ travel.get('/', travelCtrl.myList);
 travel.post('/', travelCtrl.addTravel);
 travel.post('/:id/daily/:day', upload, travelCtrl.writeDaily);
 travel.get('/:id', travelCtrl.showTravel);
+travel.put('/:id/daily/:day', upload, travelCtrl.modifyDaily);
 
 module.exports = travel;

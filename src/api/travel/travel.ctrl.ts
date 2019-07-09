@@ -91,6 +91,45 @@ exports.showTravel = async (req: express.Request, res: express.Response) => {
     }).exec();
 }
 
+exports.modifyDaily = async (req: any, res: express.Response) => {
+    const files = req.files;
+    /*
+    const { spot_length } = req.body;
+    const spot = spot_length.split(',').map(Number);
+    console.log(spot);
+    console.log(files);
+    
+*/
+    const images = files.map((value) => {
+        return {
+            path: value.path,
+            name: value.filename.split('.')[0],
+            ext: value.filename.split('.')[1]
+        }
+    });
+    
+    const { user_id, spots, length } = req.body;
+    let sum = 0;
+    spots.forEach((value, index) => {
+        value.images = images.slice(sum, sum+=length[index]);
+    });
+    console.log(spots);
+    const { id, day } = req.params;
+    const daily = {
+        day,
+        spots
+    };
+
+    await Travels.findOneAndUpdate({user_id, _id: id, daily:{day}}, {'daily.$': daily}, (err: any, output: any) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else {
+            res.status(200).json(output);
+        }
+    }).exec();
+
+}
+
 /*
 
 exports.signup = async (req, res) => {
