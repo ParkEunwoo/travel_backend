@@ -8,7 +8,7 @@ exports.myList = async (req: express.Request, res: express.Response) => {
     
     await Travels.find({user_id}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({erro: 'Not Found'});
+        if(!output) res.status(404).json({error: 'Not Found'});
         else{
             res.status(200).json(output);
         }
@@ -38,22 +38,6 @@ exports.addTravel = async (req: express.Request, res: express.Response) => {
     });
 }
 
-export interface MulterFile {
-    path: string // Available using `DiskStorage`.
-    mimetype: string
-    originalname: string
-    size: number
-    fieldname: string
-    encoding: string
-    destination: string
-    filename: string
-}
-
-exports.imageTest = async (req: express.Request & {files: MulterFile}, res: express.Response) => {
-    console.log(req.files[0].filename);
-    
-    res.json("성공?!?");
-}
 
 exports.writeDaily = async (req: any, res: express.Response) => {
     const files = req.files;
@@ -93,6 +77,20 @@ exports.writeDaily = async (req: any, res: express.Response) => {
     }).exec();
 
 }
+
+exports.showTravel = async (req: express.Request, res: express.Response) => {
+    const { user_id } = req.body;
+    const { id } = req.params;
+    
+    await Travels.findOne({user_id, _id:id}, (err: any, output:any) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else{
+            res.status(200).json(output);
+        }
+    }).exec();
+}
+
 /*
 
 exports.signup = async (req, res) => {

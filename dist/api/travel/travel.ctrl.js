@@ -16,7 +16,7 @@ exports.myList = (req, res) => __awaiter(this, void 0, void 0, function* () {
         if (err)
             res.status(500).json({ error: err });
         if (!output)
-            res.status(404).json({ erro: 'Not Found' });
+            res.status(404).json({ error: 'Not Found' });
         else {
             res.status(200).json(output);
         }
@@ -48,10 +48,6 @@ exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
         }
     });
 });
-exports.imageTest = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    console.log(req.files[0].filename);
-    res.json("성공?!?");
-});
 exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const files = req.files;
     /*
@@ -80,6 +76,19 @@ exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () 
         spots
     };
     yield Travels.findOneAndUpdate({ user_id, _id: id }, { $addToSet: { daily } }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
+        else {
+            res.status(200).json(output);
+        }
+    }).exec();
+});
+exports.showTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const { user_id } = req.body;
+    const { id } = req.params;
+    yield Travels.findOne({ user_id, _id: id }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
         if (!output)

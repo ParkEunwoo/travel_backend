@@ -21,6 +21,6 @@ const upload = multer({ storage }).array('files', 30);
 travel.get('/', travelCtrl.myList);
 travel.post('/', travelCtrl.addTravel);
 travel.post('/:id/daily/:day', upload, travelCtrl.writeDaily);
-travel.post('/image', upload, travelCtrl.imageTest);
+travel.get('/:id', travelCtrl.showTravel);
 
 module.exports = travel;
