@@ -20,10 +20,11 @@ const upload = multer({ storage }).array('files', 30);
 
 travel.get('/', travelCtrl.myList);
 travel.post('/', travelCtrl.addTravel);
-travel.post('/:id/daily/:day', upload, travelCtrl.writeDaily);
-travel.get('/:id', travelCtrl.showTravel);
-travel.put('/:id/daily/:day', upload, travelCtrl.modifyDaily);
-travel.delete('/:id', travelCtrl.deleteTravel);
+travel.post('/:_id/daily/:day', upload, travelCtrl.writeDaily);
+travel.get('/:_id', travelCtrl.showTravel);
+travel.put('/:_id/daily/:day', upload, travelCtrl.modifyDaily);
+travel.delete('/:_id', travelCtrl.deleteTravel);
 travel.get('/:category', travelCtrl.categoryList);
+travel.get('/:category/:_id', travelCtrl.showCategoryTravel);
 
 module.exports = travel;

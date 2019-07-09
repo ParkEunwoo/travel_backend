@@ -62,13 +62,13 @@ exports.writeDaily = async (req: any, res: express.Response) => {
         value.images = images.slice(sum, sum+=length[index]);
     });
     console.log(spots);
-    const { id, day } = req.params;
+    const { _id, day } = req.params;
     const daily = {
         day,
         spots
     };
 
-    await Travels.findOneAndUpdate({user_id, _id: id}, {$addToSet:{daily}}, (err: any, output: any) => {
+    await Travels.findOneAndUpdate({user_id, _id}, {$addToSet:{daily}}, (err: any, output: any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else {
@@ -80,9 +80,9 @@ exports.writeDaily = async (req: any, res: express.Response) => {
 
 exports.showTravel = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
-    const { id } = req.params;
+    const { _id } = req.params;
     
-    await Travels.findOne({user_id, _id:id}, (err: any, output:any) => {
+    await Travels.findOne({user_id, _id}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else{
@@ -114,13 +114,13 @@ exports.modifyDaily = async (req: any, res: express.Response) => {
         value.images = images.slice(sum, sum+=length[index]);
     });
     console.log(spots);
-    const { id, day } = req.params;
+    const { _id, day } = req.params;
     const daily = {
         day,
         spots
     };
 
-    await Travels.findOneAndUpdate({user_id, _id: id, daily:{day}}, {'daily.$': daily}, (err: any, output: any) => {
+    await Travels.findOneAndUpdate({user_id, _id, daily:{day}}, {'daily.$': daily}, (err: any, output: any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else {
@@ -132,9 +132,9 @@ exports.modifyDaily = async (req: any, res: express.Response) => {
 
 exports.deleteTravel = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
-    const { id } = req.params;
+    const { _id } = req.params;
     
-    await Travels.deleteOne({user_id, _id:id}, (err: any, output:any) => {
+    await Travels.deleteOne({user_id, _id}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else{
@@ -156,6 +156,18 @@ exports.categoryList = async (req: express.Request, res: express.Response) => {
     }).exec();
 }
 
+exports.showCategroyTravel = async (req: express.Request, res: express.Response) => {
+    const { user_id } = req.body;
+    const { category, _id } = req.params;
+    
+    await Travels.findOne({user_id, _id, category}, (err: any, output:any) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else{
+            res.status(200).json(output);
+        }
+    }).exec();
+}
 /*
 
 exports.signup = async (req, res) => {
