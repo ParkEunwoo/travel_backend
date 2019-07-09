@@ -130,6 +130,18 @@ exports.modifyDaily = async (req: any, res: express.Response) => {
 
 }
 
+exports.deleteTravel = async (req: express.Request, res: express.Response) => {
+    const { user_id } = req.body;
+    const { id } = req.params;
+    
+    await Travels.deleteOne({user_id, _id:id}, (err: any, output:any) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else{
+            res.status(200).json({success: "Success"});
+        }
+    }).exec();
+}
 /*
 
 exports.signup = async (req, res) => {
