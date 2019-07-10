@@ -3,11 +3,10 @@ import * as fs from 'fs';
 
 const Users = require('../../models/users');
 
-exports.myList = async (req: express.Request, res: express.Response) => {
+exports.friendList = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
     
-    console.log(req);
-    await Travels.find({user_id}, (err: any, output:any) => {
+    await Users.find({user_id}, {friends: true}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else{
