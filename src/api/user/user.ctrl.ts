@@ -15,8 +15,8 @@ exports.friendList = async (req: express.Request, res: express.Response) => {
     }).exec();
 }
 
-exports.addTravel = async (req: express.Request, res: express.Response) => {
-    const { user_id, name, place, start_date, end_date, category} = req.body;
+exports.signup = async (req: express.Request, res: express.Response) => {
+    const { user_id, friend_id} = req.body;
 
     await Travels.create({
         user_id,
@@ -39,59 +39,11 @@ exports.addTravel = async (req: express.Request, res: express.Response) => {
 }
 
 
-exports.writeDaily = async (req: any, res: express.Response) => {
-    const files = req.files;
-    /*
-    const { spot_length } = req.body;
-    const spot = spot_length.split(',').map(Number);
-    console.log(spot);
-    console.log(files);
+exports.addFriend = async (req: any, res: express.Response) => {
     
-*/
-/*
-    const files = [
-        {
-            path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329921.png",
-            filename: "1562755329921",
-            ext: "png"
-        },
-        {
-            path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329926.png",
-            filename: "1562755329926",
-            ext: "png"
-        },
-        {
-            path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329933.png",
-            filename: "1562755329933",
-            ext: "png"
-        },
-        {
-            path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329937.png",
-            filename: "1562755329937",
-            ext: "png"
-        }
-    ];*/
-    const images = files.map((value) => {
-        return {
-            path: value.path,
-            name: value.filename.split('.')[0],
-            ext: value.filename.split('.')[1]
-        }
-    });
+    const { user_id, friend_id } = req.body;
     
-    const { user_id, spots, length } = req.body;
-    let sum = 0;
-    spots.forEach((value, index) => {
-        value.images = images.slice(sum, sum+=length[index]);
-    });
-    
-    const { _id, day } = req.params;
-    const daily = {
-        day: Number(day),
-        spots
-    };
-    
-    await Travels.findOneAndUpdate({user_id, _id}, {$addToSet:{daily}}, (err: any, output: any) => {
+    await Users.findOneAndUpdate({user_id}, {$addToSet:{friend:friend_id}}, (err: any, output: any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else {

@@ -25,6 +25,8 @@ user.get('/friends/travel', userCtrl.friendsTravelList);
 user.get('/friends/:friend/travel', userCtrl.friendTravelList);
 user.get('/friends/:friend/travel/:_id', userCtrl.friendTravel);
 user.put('/profile', upload, userCtrl.modifyProfile);
+user.post('/auth/signup', userCtrl.signup);
+user.get('/auth/login', userCtrl.login);
 
 
 module.exports = user;
