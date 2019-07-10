@@ -12,6 +12,7 @@ const fs = require("fs");
 const Travels = require('../../models/travel');
 exports.myList = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const { user_id } = req.body;
+    console.log(req);
     yield Travels.find({ user_id }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
@@ -40,7 +41,7 @@ exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
             res.status(404).json({ error: "Error" });
         else {
             res.status(200).json(output);
-            fs.mkdir(__dirname + '/../../../lib/travel/' + output._id, { recursive: true }, (err) => {
+            fs.mkdir(__dirname + '/../../../public/images/travel/' + output._id, { recursive: true }, (err) => {
                 if (err) {
                     throw err;
                 }
@@ -57,6 +58,29 @@ exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () 
     console.log(files);
     
 */
+    /*
+        const files = [
+            {
+                path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329921.png",
+                filename: "1562755329921",
+                ext: "png"
+            },
+            {
+                path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329926.png",
+                filename: "1562755329926",
+                ext: "png"
+            },
+            {
+                path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329933.png",
+                filename: "1562755329933",
+                ext: "png"
+            },
+            {
+                path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329937.png",
+                filename: "1562755329937",
+                ext: "png"
+            }
+        ];*/
     const images = files.map((value) => {
         return {
             path: value.path,
@@ -69,13 +93,12 @@ exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () 
     spots.forEach((value, index) => {
         value.images = images.slice(sum, sum += length[index]);
     });
-    console.log(spots);
-    const { id, day } = req.params;
+    const { _id, day } = req.params;
     const daily = {
-        day,
+        day: Number(day),
         spots
     };
-    yield Travels.findOneAndUpdate({ user_id, _id: id }, { $addToSet: { daily } }, (err, output) => {
+    yield Travels.findOneAndUpdate({ user_id, _id }, { $addToSet: { daily } }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
         if (!output)
@@ -87,8 +110,100 @@ exports.writeDaily = (req, res) => __awaiter(this, void 0, void 0, function* () 
 });
 exports.showTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const { user_id } = req.body;
-    const { id } = req.params;
-    yield Travels.findOne({ user_id, _id: id }, (err, output) => {
+    const { _id } = req.params;
+    yield Travels.findOne({ user_id, _id }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
+        else {
+            res.status(200).json(output);
+        }
+    }).exec();
+});
+exports.modifyDaily = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    //const files = req.files;
+    /*
+    const { spot_length } = req.body;
+    const spot = spot_length.split(',').map(Number);
+    console.log(spot);
+    console.log(files);
+    
+*/ const files = [
+        {
+            path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329921.png",
+            filename: "1562755329921",
+            ext: "png"
+        },
+        {
+            path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329933.png",
+            filename: "1562755329933",
+            ext: "png"
+        },
+        {
+            path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329937.png",
+            filename: "1562755329937",
+            ext: "png"
+        }
+    ];
+    const images = files.map((value) => {
+        return {
+            path: value.path,
+            name: value.filename.split('.')[0],
+            ext: value.filename.split('.')[1]
+        };
+    });
+    const { user_id, spots, length } = req.body;
+    let sum = 0;
+    spots.forEach((value, index) => {
+        value.images = images.slice(sum, sum += length[index]);
+    });
+    const { _id, day } = req.params;
+    const daily = {
+        day: Number(day),
+        spots
+    };
+    yield Travels.update({ user_id, _id, daily: { day } }, { "daily.0": daily }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
+        else {
+            console.log(output);
+            res.status(200).json(output);
+        }
+    }).exec();
+});
+exports.deleteTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const { user_id } = req.body;
+    const { _id } = req.params;
+    yield Travels.deleteOne({ user_id, _id }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
+        else {
+            res.status(200).json({ success: "Success" });
+        }
+    }).exec();
+});
+exports.categoryList = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const { user_id } = req.body;
+    const { category } = req.params;
+    yield Travels.find({ user_id, category }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
+        else {
+            res.status(200).json(output);
+        }
+    }).exec();
+});
+exports.showCategoryTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const { user_id } = req.body;
+    const { category, _id } = req.params;
+    yield Travels.findOne({ user_id, _id, category }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
         if (!output)

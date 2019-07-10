@@ -7,7 +7,7 @@ const travel = express.Router();
 travel.use(express.json());
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, 'lib/travel/' + req.params.id);
+        callback(null, 'public/images/travel/' + req.params._id);
     },
     filename: (req, file, callback) => {
         callback(null, new Date().valueOf() + '.' + file.mimetype.split('/')[1]);
@@ -16,7 +16,11 @@ const storage = multer.diskStorage({
 const upload = multer({ storage }).array('files', 30);
 travel.get('/', travelCtrl.myList);
 travel.post('/', travelCtrl.addTravel);
-travel.post('/:id/daily/:day', upload, travelCtrl.writeDaily);
-travel.get('/:id', travelCtrl.showTravel);
+travel.post('/:_id/daily/:day', upload, travelCtrl.writeDaily);
+travel.get('/:_id', travelCtrl.showTravel);
+travel.put('/:_id/daily/:day', upload, travelCtrl.modifyDaily);
+travel.delete('/:_id', travelCtrl.deleteTravel);
+travel.get('/category/:category', travelCtrl.categoryList);
+travel.get('/category/:category/:_id', travelCtrl.showCategoryTravel);
 module.exports = travel;
 //# sourceMappingURL=index.js.map

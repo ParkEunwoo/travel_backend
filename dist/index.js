@@ -13,6 +13,7 @@ mongoose.connect(mongoURI).then(() => {
     console.error(e);
 });
 app.use(express.json());
+app.use(express.static('public'));
 app.use('/api', require('./api'));
 app.get('/', (req, res) => {
     res.send('hello world!');

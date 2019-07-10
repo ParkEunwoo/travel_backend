@@ -18,6 +18,7 @@ mongoose.connect(mongoURI).then(() => {
 });
 
 app.use(express.json());
+app.use(express.static('public'));
 app.use('/api', require('./api'));
 
 app.get('/', (req: express.Request, res: express.Response) => {

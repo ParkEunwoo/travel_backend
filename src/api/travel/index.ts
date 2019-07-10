@@ -9,7 +9,7 @@ travel.use(express.json());
 
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, 'lib/travel/' + req.params.id);
+        callback(null, 'public/images/travel/' + req.params._id);
     },
     filename: (req, file, callback) => {
         callback(null, new Date().valueOf()+'.'+file.mimetype.split('/')[1]);
@@ -24,7 +24,7 @@ travel.post('/:_id/daily/:day', upload, travelCtrl.writeDaily);
 travel.get('/:_id', travelCtrl.showTravel);
 travel.put('/:_id/daily/:day', upload, travelCtrl.modifyDaily);
 travel.delete('/:_id', travelCtrl.deleteTravel);
-travel.get('/:category', travelCtrl.categoryList);
-travel.get('/:category/:_id', travelCtrl.showCategoryTravel);
+travel.get('/category/:category', travelCtrl.categoryList);
+travel.get('/category/:category/:_id', travelCtrl.showCategoryTravel);
 
 module.exports = travel;

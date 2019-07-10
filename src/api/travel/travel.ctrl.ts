@@ -6,6 +6,7 @@ const Travels = require('../../models/travel');
 exports.myList = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
     
+    console.log(req);
     await Travels.find({user_id}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
@@ -31,7 +32,7 @@ exports.addTravel = async (req: express.Request, res: express.Response) => {
         if(!output) res.status(404).json({error: "Error"});
         else {
             res.status(200).json(output);
-            fs.mkdir(__dirname+'/../../../lib/travel/'+output._id, { recursive: true }, (err) => {
+            fs.mkdir(__dirname+'/../../../public/images/travel/'+output._id, { recursive: true }, (err) => {
                 if (err) { throw err; }
             });
         }
@@ -48,6 +49,29 @@ exports.writeDaily = async (req: any, res: express.Response) => {
     console.log(files);
     
 */
+/*
+    const files = [
+        {
+            path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329921.png",
+            filename: "1562755329921",
+            ext: "png"
+        },
+        {
+            path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329926.png",
+            filename: "1562755329926",
+            ext: "png"
+        },
+        {
+            path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329933.png",
+            filename: "1562755329933",
+            ext: "png"
+        },
+        {
+            path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329937.png",
+            filename: "1562755329937",
+            ext: "png"
+        }
+    ];*/
     const images = files.map((value) => {
         return {
             path: value.path,
@@ -61,13 +85,13 @@ exports.writeDaily = async (req: any, res: express.Response) => {
     spots.forEach((value, index) => {
         value.images = images.slice(sum, sum+=length[index]);
     });
-    console.log(spots);
+    
     const { _id, day } = req.params;
     const daily = {
-        day,
+        day: Number(day),
         spots
     };
-
+    
     await Travels.findOneAndUpdate({user_id, _id}, {$addToSet:{daily}}, (err: any, output: any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
@@ -92,14 +116,30 @@ exports.showTravel = async (req: express.Request, res: express.Response) => {
 }
 
 exports.modifyDaily = async (req: any, res: express.Response) => {
-    const files = req.files;
+    //const files = req.files;
     /*
     const { spot_length } = req.body;
     const spot = spot_length.split(',').map(Number);
     console.log(spot);
     console.log(files);
     
-*/
+*/const files = [
+    {
+        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329921.png",
+        filename: "1562755329921",
+        ext: "png"
+    },
+    {
+        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329933.png",
+        filename: "1562755329933",
+        ext: "png"
+    },
+    {
+        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329937.png",
+        filename: "1562755329937",
+        ext: "png"
+    }
+];
     const images = files.map((value) => {
         return {
             path: value.path,
@@ -113,17 +153,18 @@ exports.modifyDaily = async (req: any, res: express.Response) => {
     spots.forEach((value, index) => {
         value.images = images.slice(sum, sum+=length[index]);
     });
-    console.log(spots);
+    
     const { _id, day } = req.params;
     const daily = {
-        day,
+        day: Number(day),
         spots
     };
 
-    await Travels.findOneAndUpdate({user_id, _id, daily:{day}}, {'daily.$': daily}, (err: any, output: any) => {
+    await Travels.update({user_id, _id, daily:{day}}, {"daily.0": daily}, (err: any, output: any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else {
+            console.log(output)
             res.status(200).json(output);
         }
     }).exec();
@@ -156,7 +197,7 @@ exports.categoryList = async (req: express.Request, res: express.Response) => {
     }).exec();
 }
 
-exports.showCategroyTravel = async (req: express.Request, res: express.Response) => {
+exports.showCategoryTravel = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
     const { category, _id } = req.params;
     
