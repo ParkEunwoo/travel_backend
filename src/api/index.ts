@@ -3,6 +3,7 @@ import * as express from 'express';
 const router = express.Router();
 
 router.use('/travel', require('./travel'));
+router.use('/user', require('./user'));
 router.use(express.json());
 
 router.get('/', (req: express.Request, res: express.Response) => {
