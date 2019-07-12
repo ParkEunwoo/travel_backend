@@ -11,8 +11,7 @@ const Travels = new Schema({
     start_date: String,
     end_date: String,
     category: String,
-    views: {type: Number, default: 0},
-    love: {type: Number, default: 0}
+    like: []
 });
 
 module.exports = mongoose.model('Travels', Travels);

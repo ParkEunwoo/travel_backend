@@ -23,6 +23,7 @@ travel.post('/', travelCtrl.addTravel);
 travel.get('/:travel_id', travelCtrl.showTravel);
 travel.post('/:travel_id/daily/:day', upload, travelCtrl.writeSpot);
 travel.put('/:travel_id/daily/:day', upload, travelCtrl.modifySpot);
+travel.put('/:_id/like', travelCtrl.likeTravel);
 travel.delete('/:_id', travelCtrl.deleteTravel);
 travel.get('/category/:category', travelCtrl.categoryList);
 travel.get('/category/:category/:travel_id', travelCtrl.showCategoryTravel);

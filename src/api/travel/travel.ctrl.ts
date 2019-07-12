@@ -182,7 +182,7 @@ exports.deleteTravel = async (req: express.Request, res: express.Response) => {
     };
     
     deleteFolderRecursive(path);
-    
+
     await Travels.deleteOne({user_id, _id}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
@@ -197,7 +197,23 @@ exports.deleteTravel = async (req: express.Request, res: express.Response) => {
         else{
             res.status(200).json({success: "Success"});
         }
-    })
+    }).exec();
+}
+
+
+exports.likeTravel = async (req: any, res: express.Response) => {
+    const { user_id } = req.body;
+
+    const { _id } = req.params;
+
+    await Travels.findOneAndUpdate({_id}, {$addToSet:{like:user_id}}, (err: any, output: any) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else {
+            res.status(200).json(output);
+        }
+    }).exec();
+
 }
 
 exports.categoryList = async (req: express.Request, res: express.Response) => {
