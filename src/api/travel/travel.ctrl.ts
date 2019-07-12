@@ -2,6 +2,7 @@ import * as express from 'express';
 import * as fs from 'fs';
 
 const Travels = require('../../models/travels');
+const Spots = require('../../model/spots');
 
 exports.myList = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
@@ -17,17 +18,16 @@ exports.myList = async (req: express.Request, res: express.Response) => {
 }
 
 exports.addTravel = async (req: express.Request, res: express.Response) => {
-    const { user_id, name, place, start_date, end_date, category} = req.body;
+    const { user_id, name, title, place, start_date, end_date, category} = req.body;
 
     await Travels.create({
         user_id,
         name,
+        title,
         place,
         start_date,
         end_date,
-        category,
-        views: 0,
-        daily: []}, (err:any, output: any) => {
+        category}, (err:any, output: any) => {
         if (err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: "Error"});
         else {
@@ -40,7 +40,7 @@ exports.addTravel = async (req: express.Request, res: express.Response) => {
 }
 
 
-exports.writeDaily = async (req: any, res: express.Response) => {
+exports.writeSpot = async (req: any, res: express.Response) => {
     const files = req.files;
     /*
     const { spot_length } = req.body;
@@ -80,26 +80,25 @@ exports.writeDaily = async (req: any, res: express.Response) => {
         }
     });
     
-    const { user_id, spots, length } = req.body;
-    let sum = 0;
-    spots.forEach((value, index) => {
-        value.images = images.slice(sum, sum+=length[index]);
-    });
+    const { user_id, content, time, latitude, longitude } = req.body;
     
-    const { _id, day } = req.params;
-    const daily = {
-        day: Number(day),
-        spots
-    };
-    
-    await Travels.findOneAndUpdate({user_id, _id}, {$addToSet:{daily}}, (err: any, output: any) => {
-        if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: 'Not Found'});
+    const { travel_id, day } = req.params;
+    await Spots.create({
+        user_id,
+        travel_id,
+        day,
+        images,
+        latitude,
+        longitude,
+        time,
+        content
+        }, (err:any, output: any) => {
+        if (err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: "Error"});
         else {
             res.status(200).json(output);
         }
-    }).exec();
-
+    });
 }
 
 exports.showTravel = async (req: express.Request, res: express.Response) => {

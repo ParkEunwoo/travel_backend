@@ -4,7 +4,6 @@ const router = express.Router();
 
 router.use('/travel', require('./travel'));
 router.use('/user', require('./user'));
-router.use('/spot', require('./spot'));
 router.use(express.json());
 
 router.get('/', (req: express.Request, res: express.Response) => {
