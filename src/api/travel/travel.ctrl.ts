@@ -165,6 +165,24 @@ exports.deleteTravel = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
     const { _id } = req.params;
     
+    const path = __dirname+"/../../../public/images/travel/"+_id;
+
+    const deleteFolderRecursive = function(path) {
+        if (fs.existsSync(path)) {
+          fs.readdirSync(path).forEach(function(file, index){
+            var curPath = path + "/" + file;
+            if (fs.lstatSync(curPath).isDirectory()) { // recurse
+              deleteFolderRecursive(curPath);
+            } else { // delete file
+              fs.unlinkSync(curPath);
+            }
+          });
+          fs.rmdirSync(path);
+        }
+    };
+    
+    deleteFolderRecursive(path);
+    
     await Travels.deleteOne({user_id, _id}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
