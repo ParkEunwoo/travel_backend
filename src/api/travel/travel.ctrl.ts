@@ -201,7 +201,7 @@ exports.deleteTravel = async (req: express.Request, res: express.Response) => {
 }
 
 
-exports.likeTravel = async (req: any, res: express.Response) => {
+exports.likeTravel = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
 
     const { _id } = req.params;
