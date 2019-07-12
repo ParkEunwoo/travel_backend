@@ -103,26 +103,26 @@ exports.writeSpot = async (req: any, res: express.Response) => {
 
 exports.showTravel = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
-    const { _id } = req.params;
+    const { travel_id } = req.params;
     
-    await Travels.findOne({user_id, _id}, (err: any, output:any) => {
+    await Spots.find({user_id, travel_id}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else{
             res.status(200).json(output);
         }
-    }).exec();
+    }).sort({day: 1, time: 1}).exec();
 }
 
 exports.modifyDaily = async (req: any, res: express.Response) => {
-    //const files = req.files;
+    const files = req.files;
     /*
     const { spot_length } = req.body;
     const spot = spot_length.split(',').map(Number);
     console.log(spot);
     console.log(files);
     
-*/const files = [
+const files = [
     {
         path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329921.png",
         filename: "1562755329921",
@@ -138,7 +138,7 @@ exports.modifyDaily = async (req: any, res: express.Response) => {
         filename: "1562755329937",
         ext: "png"
     }
-];
+];*/
     const images = files.map((value) => {
         return {
             path: value.path,
@@ -147,23 +147,14 @@ exports.modifyDaily = async (req: any, res: express.Response) => {
         }
     });
     
-    const { user_id, spots, length } = req.body;
-    let sum = 0;
-    spots.forEach((value, index) => {
-        value.images = images.slice(sum, sum+=length[index]);
-    });
-    
-    const { _id, day } = req.params;
-    const daily = {
-        day: Number(day),
-        spots
-    };
+    const { user_id, content, time, latitude, longitude } = req.body;
 
-    await Travels.update({user_id, _id, daily:{day}}, {"daily.0": daily}, (err: any, output: any) => {
+    const { travel_id, day } = req.params;
+
+    await Spots.findOneAndUpdate({user_id, travel_id, day}, {images, latitude, longitude, time, content}, (err: any, output: any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else {
-            console.log(output)
             res.status(200).json(output);
         }
     }).exec();
@@ -181,6 +172,14 @@ exports.deleteTravel = async (req: express.Request, res: express.Response) => {
             res.status(200).json({success: "Success"});
         }
     }).exec();
+    
+    await Spots.delete({user_id, travel_id:_id}, (err: any, output: any) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else{
+            res.status(200).json({success: "Success"});
+        }
+    })
 }
 
 exports.categoryList = async (req: express.Request, res: express.Response) => {
@@ -198,128 +197,13 @@ exports.categoryList = async (req: express.Request, res: express.Response) => {
 
 exports.showCategoryTravel = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
-    const { category, _id } = req.params;
+    const { travel_id } = req.params;
     
-    await Travels.findOne({user_id, _id, category}, (err: any, output:any) => {
+    await Spots.find({user_id, travel_id}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else{
             res.status(200).json(output);
         }
-    }).exec();
+    }).sort({day: 1, time: 1}).exec();
 }
-/*
-
-exports.signup = async (req, res) => {
-    const { name, number, id, password, phone } = req.body;
-
-    const user = new User({
-        name, number, id, password, phone,
-        rank: 0,
-    });
-    console.log(user);
-    await user.save((err) => {
-        if(err) {
-            res.status(500).json({error: err});
-        }
-    });
-    res.json({"success":true});
-};
-
-exports.regist = async (req, res) => {
-    const { week, title, content } = req.body;
-    const _id = req.params.id;
-    const activity = {
-        week,
-        title,
-        content,
-        date: new Date()
-    }
-    if(leader){
-        await Recruitment.findOneAndUpdate({_id}, {$addToSet:{activity}}, (err, user) => {
-            if(err) res.status(500).json({error: err});
-            if(!user) res.status(404).json({error: 'Not Found'});
-            else res.status(200).json(user);
-        }).exec();
-        
-    }
-    else{
-        res.json({login: '로그인안됨'});
-    }
-};
-exports.statusMember = async (req: express.Request, res: express.Response) => {
-   
-    const number = req.params.id;
-
-    console.log(number);
-    await Recruitment.find( { member: { $elemMatch: { number } } } , (err, output) => {
-        if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: 'Not Found'});
-        else{
-            res.status(200).json(output);
-            console.log(output);
-        }
-    }).exec();
-};
-exports.statusLeader = async (req, res) => {
-
-    const leader = req.params.id;
-
-    console.log(leader);
-    await Recruitment.find( {leader}  , (err, output) => {
-        if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: 'Not Found'});
-        else{
-            res.status(200).json(output);
-            console.log(output);
-        }
-    }).exec();
-};
-
-exports.regist = async (req, res) => {
-    const { week, title, content } = req.body;
-    const _id = req.params.id;
-    const activity = {
-        week,
-        title,
-        content,
-        date: new Date()
-    }
-    if(leader){
-        await Recruitment.findOneAndUpdate({_id}, {$addToSet:{activity}}, (err, user) => {
-            if(err) res.status(500).json({error: err});
-            if(!user) res.status(404).json({error: 'Not Found'});
-            else res.status(200).json(user);
-        }).exec();
-        
-    }
-    else{
-        res.json({login: '로그인안됨'});
-    }
-};
-
-exports.member = async (req, res) => {
-
-    const _id = req.params.id;
-    await Recruitment.findOne({_id}, {member:true}, (err, user) => {
-        if(err) res.status(500).json({error: err});
-        if(!user) res.status(404).json({error: 'Not Found'});
-        else {res.status(200).json(user);}
-        console.log(user);
-    }).exec();
-
-};
-
-exports.week = async (req, res) => {
-
-    const _id = req.params.id;
-    await Recruitment.findOne({_id}, {activity:true}, (err, user) => {
-        if(err) res.status(500).json({error: err});
-        if(!user) res.status(404).json({error: 'Not Found'});
-        else {res.status(200).json(user);}
-        console.log(user);
-    }).exec();
-
-};
-
-*/
