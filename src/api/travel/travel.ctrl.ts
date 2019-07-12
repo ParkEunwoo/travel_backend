@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as fs from 'fs';
 
-const Travels = require('../../models/travel');
+const Travels = require('../../models/travels');
 
 exports.myList = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
