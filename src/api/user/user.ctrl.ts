@@ -3,6 +3,7 @@ import * as fs from 'fs';
 
 const Users = require('../../models/users');
 const Travels = require('../../models/travel');
+const Spots = require('../../models/spots');
 
 exports.friendList = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
@@ -47,6 +48,20 @@ exports.friendsTravelList = async (req: express.Request, res: express.Response) 
     const { user_id, friends } = req.body;
     
     await Travels.find({user_id:{$in:friends}}, (err: any, output:any) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else{
+            res.status(200).json(output);
+        }
+    }).exec();
+
+}
+
+exports.friendsTravelList = async (req: express.Request, res: express.Response) => {
+    const { user_id } = req.body;
+    const { friend } = req.params;
+    
+    await Travels.find({user_id: friend}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else{
