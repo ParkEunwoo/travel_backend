@@ -33,7 +33,7 @@ exports.deleteFriend = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
     const { friend } = req.params;
     console.log(friend);
-    await Users.updateOne({_id:user_id}, {$pull:{friends:{$elemMatch:friend}}}, (err: any, output:any) => {
+    await Users.findOneAndUpdate({_id:user_id}, {$pull:{friends:{$elemMatch:friend}}}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else{
@@ -44,14 +44,13 @@ exports.deleteFriend = async (req: express.Request, res: express.Response) => {
 
 
 exports.friendsTravelList = async (req: express.Request, res: express.Response) => {
-    const { user_id } = req.body;
-    let friends = [];
+    const { user_id, friends } = req.body;
     
-    await Users.findOne({user_id}, {friends: true}, (err: any, output:any) => {
+    await Travels.find({user_id:{$in:friends}}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else{
-            friends = output;
+            res.status(200).json(output);
         }
     }).exec();
 
