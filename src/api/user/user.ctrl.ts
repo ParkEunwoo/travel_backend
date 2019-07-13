@@ -103,10 +103,10 @@ const files = [
         ext: file.filename.split('.')[1]
     };  
     
-    const { user_id, name } = req.body;
+    const { user_id, name, introduct } = req.body;
 
 
-    await Users.findOneAndUpdate({_id: user_id}, {name, profile}, (err: any, output: any) => {
+    await Users.findOneAndUpdate({_id: user_id}, {name, profile, introduct}, (err: any, output: any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else {
@@ -130,55 +130,31 @@ exports.login = async (req: express.Request, res: express.Response) => {
 }
 
 
-
-/*
-
-exports.categoryList = async (req: express.Request, res: express.Response) => {
-    const { user_id } = req.body;
-    const { category } = req.params;
-
-    await Travels.find({user_id, category}, (err: any, output:any) => {
-        if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: 'Not Found'});
-        else{
-            res.status(200).json(output);
-        }
-    }).exec();
-}
-
-exports.showCategoryTravel = async (req: express.Request, res: express.Response) => {
-    const { user_id } = req.body;
-    const { category, _id } = req.params;
+exports.signup = async (req: any, res: express.Response) => {
+    const file = req.file;
     
-    await Travels.findOne({user_id, _id, category}, (err: any, output:any) => {
-        if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: 'Not Found'});
-        else{
-            res.status(200).json(output);
-        }
-    }).exec();
-}
+    const profile = {
+        path: file.path,
+        name: file.filename.split('.')[0],
+        ext: file.filename.split('.')[1]
+    };  
 
+    const { token, name, introduct } = req.body;
 
-exports.signup = async (req: express.Request, res: express.Response) => {
-    const { user_id, friend_id} = req.body;
-
-    await Travels.create({
-        user_id,
+    await Users.create({
+        token,
         name,
-        place,
-        start_date,
-        end_date,
-        category,
-        views: 0,
-        daily: []}, (err:any, output: any) => {
+        introduct,
+        profile,
+        friends:[]
+    }, (err:any, output: any) => {
         if (err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: "Error"});
         else {
             res.status(200).json(output);
-            fs.mkdir(__dirname+'/../../../public/images/travel/'+output._id, { recursive: true }, (err) => {
+            fs.mkdir(__dirname+'/../../../public/images/profile/'+output._id, { recursive: true }, (err) => {
                 if (err) { throw err; }
             });
         }
     });
-}*/
+}
