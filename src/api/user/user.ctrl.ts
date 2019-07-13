@@ -57,7 +57,7 @@ exports.friendsTravelList = async (req: express.Request, res: express.Response) 
 
 }
 
-exports.friendsTravelList = async (req: express.Request, res: express.Response) => {
+exports.friendTravelList = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
     const { friend } = req.params;
     
@@ -70,6 +70,52 @@ exports.friendsTravelList = async (req: express.Request, res: express.Response) 
     }).exec();
 
 }
+
+
+exports.modifyProfile = async (req: any, res: express.Response) => {
+    const file = req.file;
+    /*
+    const { spot_length } = req.body;
+    const spot = spot_length.split(',').map(Number);
+    console.log(spot);
+    console.log(files);
+    
+const files = [
+    {
+        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329921.png",
+        filename: "1562755329921",
+        ext: "png"
+    },
+    {
+        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329933.png",
+        filename: "1562755329933",
+        ext: "png"
+    },
+    {
+        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329937.png",
+        filename: "1562755329937",
+        ext: "png"
+    }
+];*/
+    const profile = {
+        path: file.path,
+        name: file.filename.split('.')[0],
+        ext: file.filename.split('.')[1]
+    };  
+    
+    const { user_id, name } = req.body;
+
+
+    await Users.findOneAndUpdate({_id: user_id}, {name, profile}, (err: any, output: any) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else {
+            res.status(200).json(output);
+        }
+    }).exec();
+
+}
+
 
 /*
 

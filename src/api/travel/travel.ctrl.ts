@@ -105,7 +105,7 @@ exports.showTravel = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
     const { travel_id } = req.params;
     
-    await Spots.find({user_id, travel_id}, (err: any, output:any) => {
+    await Spots.find({travel_id}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else{
