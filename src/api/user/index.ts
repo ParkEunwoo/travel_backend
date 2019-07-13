@@ -23,9 +23,9 @@ user.post('/friends', userCtrl.addFriend);
 user.delete('/friends/:friend', userCtrl.deleteFriend);
 user.get('/friends/travel', userCtrl.friendsTravelList);
 user.get('/friends/:friend/travel', userCtrl.friendTravelList);
-user.put('/profile', upload, userCtrl.modifyProfile);/*
-user.post('/auth/signup', userCtrl.signup);
+user.put('/profile', upload, userCtrl.modifyProfile);
+//user.post('/auth/signup', userCtrl.signup);
 user.get('/auth/login', userCtrl.login);
-*/
+
 
 module.exports = user;

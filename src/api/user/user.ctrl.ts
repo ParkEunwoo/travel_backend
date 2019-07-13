@@ -117,6 +117,20 @@ const files = [
 }
 
 
+exports.login = async (req: express.Request, res: express.Response) => {
+    const { token } = req.body;
+    
+    await Users.findOne({token}, (err: any, output:any) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else{
+            res.status(200).json(output);
+        }
+    }).exec();
+}
+
+
+
 /*
 
 exports.categoryList = async (req: express.Request, res: express.Response) => {
