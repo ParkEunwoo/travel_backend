@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as fs from 'fs';
 
 const Users = require('../../models/users');
-const Travels = require('../../models/travel');
+const Travels = require('../../models/travels');
 const Spots = require('../../models/spots');
 
 exports.friendList = async (req: express.Request, res: express.Response) => {

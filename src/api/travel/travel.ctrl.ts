@@ -2,7 +2,7 @@ import * as express from 'express';
 import * as fs from 'fs';
 
 const Travels = require('../../models/travels');
-const Spots = require('../../model/spots');
+const Spots = require('../../models/spots');
 
 exports.myList = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.body;
@@ -114,7 +114,7 @@ exports.showTravel = async (req: express.Request, res: express.Response) => {
     }).sort({day: 1, time: 1}).exec();
 }
 
-exports.modifyDaily = async (req: any, res: express.Response) => {
+exports.modifySpot = async (req: any, res: express.Response) => {
     const files = req.files;
     /*
     const { spot_length } = req.body;

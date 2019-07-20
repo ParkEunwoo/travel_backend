@@ -13,16 +13,14 @@ const storage = multer.diskStorage({
         callback(null, new Date().valueOf() + '.' + file.mimetype.split('/')[1]);
     }
 });
-const upload = multer({ storage }).array('files', 30);
+const upload = multer({ storage }).single('file');
 user.get('/friends', userCtrl.friendList);
 user.post('/friends', userCtrl.addFriend);
 user.delete('/friends/:friend', userCtrl.deleteFriend);
-user.get('/friends/travel', userCtrl.friendsTravelList); /*
+user.get('/friends/travel', userCtrl.friendsTravelList);
 user.get('/friends/:friend/travel', userCtrl.friendTravelList);
-user.get('/friends/:friend/travel/:_id', userCtrl.friendTravel);
 user.put('/profile', upload, userCtrl.modifyProfile);
 user.post('/auth/signup', userCtrl.signup);
-user.get('/auth/login', userCtrl.login);
-*/
+user.get('/auth/login', upload, userCtrl.login);
 module.exports = user;
 //# sourceMappingURL=index.js.map

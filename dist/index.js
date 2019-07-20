@@ -16,7 +16,8 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use('/api', require('./api'));
 app.get('/', (req, res) => {
-    res.send('hello world!');
+    console.log("hdhfsalkhfkldsah");
+    res.status(200).json({ success: "success" });
 });
 app.listen(port, () => {
     console.log('listening on port ' + port);

@@ -22,7 +22,8 @@ app.use(express.static('public'));
 app.use('/api', require('./api'));
 
 app.get('/', (req: express.Request, res: express.Response) => {
-    res.send('hello world!');
+    console.log("정상작동");
+    res.status(200).json({success:"success"});
 });
 
 app.listen(port, () => {

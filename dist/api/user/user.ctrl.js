@@ -8,8 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const fs = require("fs");
 const Users = require('../../models/users');
-const Travels = require('../../models/travel');
+const Travels = require('../../models/travels');
+const Spots = require('../../models/spots');
 exports.friendList = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const { user_id } = req.body;
     yield Users.findOne({ _id: user_id }, { friends: true }, (err, output) => {
@@ -38,7 +40,7 @@ exports.deleteFriend = (req, res) => __awaiter(this, void 0, void 0, function* (
     const { user_id } = req.body;
     const { friend } = req.params;
     console.log(friend);
-    yield Users.updateOne({ _id: user_id }, { $pull: { friends: { $elemMatch: friend } } }, (err, output) => {
+    yield Users.findOneAndUpdate({ _id: user_id }, { $pull: { friends: { $elemMatch: friend } } }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
         if (!output)
@@ -49,67 +51,110 @@ exports.deleteFriend = (req, res) => __awaiter(this, void 0, void 0, function* (
     }).exec();
 });
 exports.friendsTravelList = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const { user_id } = req.body;
-    let friends = [];
-    yield Users.findOne({ user_id }, { friends: true }, (err, output) => {
+    const { user_id, friends } = req.body;
+    yield Travels.find({ user_id: { $in: friends } }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
         if (!output)
             res.status(404).json({ error: 'Not Found' });
         else {
-            friends = output;
+            res.status(200).json(output);
         }
     }).exec();
 });
-/*
-
-exports.categoryList = async (req: express.Request, res: express.Response) => {
+exports.friendTravelList = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const { user_id } = req.body;
-    const { category } = req.params;
-
-    await Travels.find({user_id, category}, (err: any, output:any) => {
-        if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: 'Not Found'});
-        else{
-            res.status(200).json(output);
-        }
-    }).exec();
-}
-
-exports.showCategoryTravel = async (req: express.Request, res: express.Response) => {
-    const { user_id } = req.body;
-    const { category, _id } = req.params;
-    
-    await Travels.findOne({user_id, _id, category}, (err: any, output:any) => {
-        if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: 'Not Found'});
-        else{
-            res.status(200).json(output);
-        }
-    }).exec();
-}
-
-
-exports.signup = async (req: express.Request, res: express.Response) => {
-    const { user_id, friend_id} = req.body;
-
-    await Travels.create({
-        user_id,
-        name,
-        place,
-        start_date,
-        end_date,
-        category,
-        views: 0,
-        daily: []}, (err:any, output: any) => {
-        if (err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: "Error"});
+    const { friend } = req.params;
+    yield Travels.find({ user_id: friend }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
         else {
             res.status(200).json(output);
-            fs.mkdir(__dirname+'/../../../public/images/travel/'+output._id, { recursive: true }, (err) => {
-                if (err) { throw err; }
+        }
+    }).exec();
+});
+exports.modifyProfile = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const file = req.file;
+    /*
+    const { spot_length } = req.body;
+    const spot = spot_length.split(',').map(Number);
+    console.log(spot);
+    console.log(files);
+    
+const files = [
+    {
+        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329921.png",
+        filename: "1562755329921",
+        ext: "png"
+    },
+    {
+        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329933.png",
+        filename: "1562755329933",
+        ext: "png"
+    },
+    {
+        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329937.png",
+        filename: "1562755329937",
+        ext: "png"
+    }
+];*/
+    const profile = {
+        path: file.path,
+        name: file.filename.split('.')[0],
+        ext: file.filename.split('.')[1]
+    };
+    const { user_id, name, introduct } = req.body;
+    yield Users.findOneAndUpdate({ _id: user_id }, { name, profile, introduct }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
+        else {
+            res.status(200).json(output);
+        }
+    }).exec();
+});
+exports.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const { token } = req.body;
+    yield Users.findOne({ token }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
+        else {
+            res.status(200).json(output);
+        }
+    }).exec();
+});
+exports.signup = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const file = req.file;
+    const profile = {
+        path: file.path,
+        name: file.filename.split('.')[0],
+        ext: file.filename.split('.')[1]
+    };
+    const { token, name, introduct } = req.body;
+    yield Users.create({
+        token,
+        name,
+        introduct,
+        profile,
+        friends: []
+    }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: "Error" });
+        else {
+            res.status(200).json(output);
+            fs.mkdir(__dirname + '/../../../public/images/profile/' + output._id, { recursive: true }, (err) => {
+                if (err) {
+                    throw err;
+                }
             });
         }
     });
-}*/ 
+});
 //# sourceMappingURL=user.ctrl.js.map

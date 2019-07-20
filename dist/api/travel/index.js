@@ -16,11 +16,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage }).array('files', 30);
 travel.get('/', travelCtrl.myList);
 travel.post('/', travelCtrl.addTravel);
-travel.post('/:_id/daily/:day', upload, travelCtrl.writeDaily);
-travel.get('/:_id', travelCtrl.showTravel);
-travel.put('/:_id/daily/:day', upload, travelCtrl.modifyDaily);
+travel.get('/:travel_id', travelCtrl.showTravel);
+travel.post('/:travel_id/daily/:day', upload, travelCtrl.writeSpot);
+travel.put('/:travel_id/daily/:day', upload, travelCtrl.modifySpot);
+travel.put('/:_id/like', travelCtrl.likeTravel);
 travel.delete('/:_id', travelCtrl.deleteTravel);
 travel.get('/category/:category', travelCtrl.categoryList);
-travel.get('/category/:category/:_id', travelCtrl.showCategoryTravel);
+travel.get('/category/:category/:travel_id', travelCtrl.showCategoryTravel);
 module.exports = travel;
 //# sourceMappingURL=index.js.map

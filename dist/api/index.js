@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 router.use('/travel', require('./travel'));
 router.use('/user', require('./user'));
+router.use('/search', require('./search'));
 router.use(express.json());
 router.get('/', (req, res) => {
     res.send('/api');

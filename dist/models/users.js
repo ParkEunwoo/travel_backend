@@ -11,6 +11,7 @@ const Users = new Schema({
     token: String,
     name: String,
     profile: Image,
+    introduct: String,
     friends: [String]
 });
 module.exports = mongoose.model('Users', Users);
