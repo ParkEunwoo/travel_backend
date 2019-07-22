@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use('/api', require('./api'));
 app.get('/', (req, res) => {
-    console.log("hdhfsalkhfkldsah");
+    console.log("정상작동");
     res.status(200).json({ success: "success" });
 });
 app.listen(port, () => {
