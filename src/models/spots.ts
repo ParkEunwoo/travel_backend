@@ -5,7 +5,8 @@ const { Schema } = mongoose;
 const Image = new Schema({
     path: String,
     name: String,
-    ext: String
+    ext: String,
+    uri: String
 });
 
 const Spots = new Schema({
