@@ -113,7 +113,8 @@ exports.signup = async (req: any, res: express.Response) => {
     const profile = {
         path: file.path,
         name: file.filename.split('.')[0],
-        ext: file.filename.split('.')[1]
+        ext: file.filename.split('.')[1],
+        uri: 'https://pic-me-back.herokuapp.com/images/profile/'+file.filename
     };  
 
     const { token, name, introduct } = req.body;

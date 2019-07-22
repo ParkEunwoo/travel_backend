@@ -110,7 +110,8 @@ exports.signup = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const profile = {
         path: file.path,
         name: file.filename.split('.')[0],
-        ext: file.filename.split('.')[1]
+        ext: file.filename.split('.')[1],
+        uri: 'https://pic-me-back.herokuapp.com/images/profile/' + file.filename
     };
     const { token, name, introduct } = req.body;
     yield Users.create({
