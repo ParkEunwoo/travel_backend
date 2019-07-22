@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as fs from 'fs';
 
 const Users = require('../../models/users');
 const Travels = require('../../models/travels');
@@ -110,7 +109,7 @@ exports.login = async (req: express.Request, res: express.Response) => {
 
 exports.signup = async (req: any, res: express.Response) => {
     const file = req.file;
-    console.log(file);
+    
     const profile = {
         path: file.path,
         name: file.filename.split('.')[0],
@@ -130,9 +129,6 @@ exports.signup = async (req: any, res: express.Response) => {
         if(!output) res.status(404).json({error: "Error"});
         else {
             res.status(200).json(output);
-            fs.mkdir(__dirname+'/../../../public/images/profile/'+output._id, { recursive: true }, (err) => {
-                if (err) { throw err; }
-            });
         }
     });
 }

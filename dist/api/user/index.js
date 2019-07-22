@@ -7,7 +7,7 @@ const user = express.Router();
 user.use(express.json());
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, 'public/images/profile/' + req.body._id);
+        callback(null, 'public/images/profile/');
     },
     filename: (req, file, callback) => {
         callback(null, new Date().valueOf() + '.' + file.mimetype.split('/')[1]);
@@ -20,7 +20,7 @@ user.delete('/friends/:friend', userCtrl.deleteFriend);
 user.get('/friends/travel', userCtrl.friendsTravelList);
 user.get('/friends/:friend/travel', userCtrl.friendTravelList);
 user.put('/profile', upload, userCtrl.modifyProfile);
-user.post('/auth/signup', userCtrl.signup);
+user.post('/auth/signup', upload, userCtrl.signup);
 user.get('/auth/login', upload, userCtrl.login);
 module.exports = user;
 //# sourceMappingURL=index.js.map

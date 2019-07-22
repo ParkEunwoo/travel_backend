@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = require("fs");
 const Users = require('../../models/users');
 const Travels = require('../../models/travels');
 const Spots = require('../../models/spots');
@@ -77,29 +76,6 @@ exports.friendTravelList = (req, res) => __awaiter(this, void 0, void 0, functio
 });
 exports.modifyProfile = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const file = req.file;
-    /*
-    const { spot_length } = req.body;
-    const spot = spot_length.split(',').map(Number);
-    console.log(spot);
-    console.log(files);
-    
-const files = [
-    {
-        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329921.png",
-        filename: "1562755329921",
-        ext: "png"
-    },
-    {
-        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329933.png",
-        filename: "1562755329933",
-        ext: "png"
-    },
-    {
-        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329937.png",
-        filename: "1562755329937",
-        ext: "png"
-    }
-];*/
     const profile = {
         path: file.path,
         name: file.filename.split('.')[0],
@@ -149,11 +125,6 @@ exports.signup = (req, res) => __awaiter(this, void 0, void 0, function* () {
             res.status(404).json({ error: "Error" });
         else {
             res.status(200).json(output);
-            fs.mkdir(__dirname + '/../../../public/images/profile/' + output._id, { recursive: true }, (err) => {
-                if (err) {
-                    throw err;
-                }
-            });
         }
     });
 });

@@ -1,5 +1,7 @@
 import * as express from 'express';
 import * as multer from 'multer';
+import * as fs from 'fs';
+
 const userCtrl = require('./user.ctrl');
 
 const user = express.Router();
@@ -9,7 +11,7 @@ user.use(express.json());
 
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        callback(null, 'public/images/profile/' + req.body._id);
+        callback(null, 'public/images/profile/');
     },
     filename: (req, file, callback) => {
         callback(null, new Date().valueOf()+'.'+file.mimetype.split('/')[1]);
