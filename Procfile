@@ -1,1 +1,1 @@
-web: node -r dotenv dist
+web: node dist
