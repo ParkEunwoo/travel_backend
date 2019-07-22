@@ -24,7 +24,7 @@ user.delete('/friends/:friend', userCtrl.deleteFriend);
 user.get('/friends/travel', userCtrl.friendsTravelList);
 user.get('/friends/:friend/travel', userCtrl.friendTravelList);
 user.put('/profile', upload, userCtrl.modifyProfile);
-user.post('/auth/signup', userCtrl.signup);
+user.post('/auth/signup', upload, userCtrl.signup);
 user.get('/auth/login', upload, userCtrl.login);
 
 

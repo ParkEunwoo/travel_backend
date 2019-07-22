@@ -74,29 +74,7 @@ exports.friendTravelList = async (req: express.Request, res: express.Response) =
 
 exports.modifyProfile = async (req: any, res: express.Response) => {
     const file = req.file;
-    /*
-    const { spot_length } = req.body;
-    const spot = spot_length.split(',').map(Number);
-    console.log(spot);
-    console.log(files);
     
-const files = [
-    {
-        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329921.png",
-        filename: "1562755329921",
-        ext: "png"
-    },
-    {
-        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329933.png",
-        filename: "1562755329933",
-        ext: "png"
-    },
-    {
-        path: "public/images/travel/5d25bfeb02d8ac42c4b053f6/1562755329937.png",
-        filename: "1562755329937",
-        ext: "png"
-    }
-];*/
     const profile = {
         path: file.path,
         name: file.filename.split('.')[0],
