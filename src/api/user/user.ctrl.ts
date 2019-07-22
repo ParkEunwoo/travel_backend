@@ -109,7 +109,7 @@ exports.login = async (req: express.Request, res: express.Response) => {
 
 exports.signup = async (req: any, res: express.Response) => {
     const file = req.file;
-    
+    console.log(file);
     const profile = {
         path: file.path,
         name: file.filename.split('.')[0],

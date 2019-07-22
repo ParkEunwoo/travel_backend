@@ -106,6 +106,7 @@ exports.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
 });
 exports.signup = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const file = req.file;
+    console.log(file);
     const profile = {
         path: file.path,
         name: file.filename.split('.')[0],
