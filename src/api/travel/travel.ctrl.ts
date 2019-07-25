@@ -29,6 +29,7 @@ exports.addTravel = async (req: any, res: express.Response) => {
 
     const { user_id, name, title, place, start_date, end_date, category} = req.body;
 
+    console.log(req.body);
     await Travels.create({
         user_id,
         name,
