@@ -19,7 +19,7 @@ const Travels = new Schema({
     end_date: String,
     category: String,
     like: [],
-    image: Image
+    image: {Image}
 });
 
 module.exports = mongoose.model('Travels', Travels);

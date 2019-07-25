@@ -20,11 +20,9 @@ const upload = multer({ storage }).array('files', 30);
 
 const store = multer.diskStorage({
     destination: (req, file, callback) => {
-        console.log("destination");
         callback(null, 'public/images/travel/');
     },
     filename: (req, file, callback) => {
-        console.log("filename");
         callback(null, new Date().valueOf()+'.'+file.mimetype.split('/')[1]);
     }
 })
