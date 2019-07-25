@@ -17,7 +17,16 @@ exports.myList = async (req: express.Request, res: express.Response) => {
     }).exec();
 }
 
-exports.addTravel = async (req: express.Request, res: express.Response) => {
+exports.addTravel = async (req: any, res: express.Response) => {
+    const file = req.file;
+    console.log(file);
+    const image = {
+        path: file.path,
+        name: file.filename.split('.')[0],
+        ext: file.filename.split('.')[1],
+        uri: 'https://pic-me-back.herokuapp.com/images/profile/'+file.filename
+    };  
+
     const { user_id, name, title, place, start_date, end_date, category} = req.body;
 
     await Travels.create({
@@ -27,7 +36,8 @@ exports.addTravel = async (req: express.Request, res: express.Response) => {
         place,
         start_date,
         end_date,
-        category}, (err:any, output: any) => {
+        category,
+        image}, (err:any, output: any) => {
         if (err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: "Error"});
         else {
