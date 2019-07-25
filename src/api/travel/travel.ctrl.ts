@@ -19,7 +19,7 @@ exports.myList = async (req: express.Request, res: express.Response) => {
 
 exports.addTravel = async (req: any, res: express.Response) => {
     const file = req.file;
-    console.log('addTravel access');
+    console.log('---------------addTravel access------------------');
     console.log(file);
     const image = {
         path: file.path,
@@ -29,9 +29,9 @@ exports.addTravel = async (req: any, res: express.Response) => {
     };  
 
     const { user_id, name, title, place, start_date, end_date, category} = req.body;
-
+    console.log('---------------------------');
     console.log(req.body);
-    console.log('aa');
+    console.log('--------------------------');
     await Travels.create({
         user_id,
         name,
