@@ -18,6 +18,7 @@ exports.myList = async (req: express.Request, res: express.Response) => {
 }
 
 exports.addTravel = async (req: any, res: express.Response) => {
+    console.log('access success????????????????????????????');
     const file = req.file;
     console.log('---------------addTravel access------------------');
     console.log(file);
