@@ -19,7 +19,7 @@ exports.myList = async (req: express.Request, res: express.Response) => {
 
 exports.addTravel = async (req: any, res: express.Response) => {
     const file = req.file;
-    
+
     const image = {
         path: file.path,
         name: file.filename.split('.')[0],
@@ -28,6 +28,9 @@ exports.addTravel = async (req: any, res: express.Response) => {
     };  
 
     const { user_id, name, title, place, start_date, end_date, category} = req.body;
+    console.log('user_id', user_id);
+    console.log('name',name);
+    console.log('title', title);
     await Travels.create({
         user_id,
         name,
