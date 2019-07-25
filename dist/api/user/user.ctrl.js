@@ -79,7 +79,8 @@ exports.modifyProfile = (req, res) => __awaiter(this, void 0, void 0, function* 
     const profile = {
         path: file.path,
         name: file.filename.split('.')[0],
-        ext: file.filename.split('.')[1]
+        ext: file.filename.split('.')[1],
+        uri: 'https://pic-me-back.herokuapp.com/images/profile/' + file.filename
     };
     const { user_id, name, introduct } = req.body;
     yield Users.findOneAndUpdate({ _id: user_id }, { name, profile, introduct }, (err, output) => {

@@ -14,8 +14,19 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage }).array('files', 30);
+const store = multer.diskStorage({
+    destination: (req, file, callback) => {
+        console.log("destination");
+        callback(null, 'public/images/travel/');
+    },
+    filename: (req, file, callback) => {
+        console.log("filename");
+        callback(null, new Date().valueOf() + '.' + file.mimetype.split('/')[1]);
+    }
+});
+const up = multer({ storage: store }).single('file');
 travel.get('/', travelCtrl.myList);
-travel.post('/', travelCtrl.addTravel);
+travel.post('/', up, travelCtrl.addTravel);
 travel.get('/:travel_id', travelCtrl.showTravel);
 travel.post('/:travel_id/daily/:day', upload, travelCtrl.writeSpot);
 travel.put('/:travel_id/daily/:day', upload, travelCtrl.modifySpot);

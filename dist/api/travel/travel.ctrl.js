@@ -25,7 +25,20 @@ exports.myList = (req, res) => __awaiter(this, void 0, void 0, function* () {
     }).exec();
 });
 exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    console.log('access success????????????????????????????');
+    const file = req.file;
+    console.log('---------------addTravel access------------------');
+    console.log(file);
+    const image = {
+        path: file.path,
+        name: file.filename.split('.')[0],
+        ext: file.filename.split('.')[1],
+        uri: 'https://pic-me-back.herokuapp.com/images/profile/' + file.filename
+    };
     const { user_id, name, title, place, start_date, end_date, category } = req.body;
+    console.log('---------------------------');
+    console.log(req.body);
+    console.log('--------------------------');
     yield Travels.create({
         user_id,
         name,
@@ -33,7 +46,8 @@ exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
         place,
         start_date,
         end_date,
-        category
+        category,
+        image
     }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
