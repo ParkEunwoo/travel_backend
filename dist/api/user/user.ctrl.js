@@ -12,7 +12,7 @@ const Users = require('../../models/users');
 const Travels = require('../../models/travels');
 const Spots = require('../../models/spots');
 exports.friendList = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const { user_id } = req.body;
+    const { user_id } = req.params;
     yield Users.findOne({ _id: user_id }, { friends: true }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
@@ -50,7 +50,17 @@ exports.deleteFriend = (req, res) => __awaiter(this, void 0, void 0, function* (
     }).exec();
 });
 exports.friendsTravelList = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const { user_id, friends } = req.body;
+    const { user_id } = req.params;
+    let friends;
+    yield Users.findOne({ _id: user_id }, { friends: true }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
+        else {
+            friends = output.data;
+        }
+    }).exec();
     yield Travels.find({ user_id: { $in: friends } }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
@@ -62,7 +72,6 @@ exports.friendsTravelList = (req, res) => __awaiter(this, void 0, void 0, functi
     }).exec();
 });
 exports.friendTravelList = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const { user_id } = req.body;
     const { friend } = req.params;
     yield Travels.find({ user_id: friend }, (err, output) => {
         if (err)

@@ -20,10 +20,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }).single('file');
 
-user.get('/friends', userCtrl.friendList);
+user.get('/:user_id/friends', userCtrl.friendList);
 user.post('/friends', userCtrl.addFriend);
 user.delete('/friends/:friend', userCtrl.deleteFriend);
-user.get('/friends/travel', userCtrl.friendsTravelList);
+user.get('/:user_id/friends/travel', userCtrl.friendsTravelList);
 user.get('/friends/:friend/travel', userCtrl.friendTravelList);
 user.put('/profile', upload, userCtrl.modifyProfile);
 user.post('/auth/signup', upload, userCtrl.signup);

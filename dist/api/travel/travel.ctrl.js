@@ -12,7 +12,7 @@ const fs = require("fs");
 const Travels = require('../../models/travels');
 const Spots = require('../../models/spots');
 exports.myList = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const { user_id } = req.body;
+    const { user_id } = req.params;
     console.log(req);
     yield Travels.find({ user_id }, (err, output) => {
         if (err)
@@ -25,10 +25,7 @@ exports.myList = (req, res) => __awaiter(this, void 0, void 0, function* () {
     }).exec();
 });
 exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    console.log('access success????????????????????????????');
     const file = req.file;
-    console.log('---------------addTravel access------------------');
-    console.log(file);
     const image = {
         path: file.path,
         name: file.filename.split('.')[0],
@@ -36,9 +33,9 @@ exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
         uri: 'https://pic-me-back.herokuapp.com/images/profile/' + file.filename
     };
     const { user_id, name, title, place, start_date, end_date, category } = req.body;
-    console.log('---------------------------');
-    console.log(req.body);
-    console.log('--------------------------');
+    console.log('user_id', user_id);
+    console.log('name', name);
+    console.log('title', title);
     yield Travels.create({
         user_id,
         name,

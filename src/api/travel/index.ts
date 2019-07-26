@@ -29,7 +29,7 @@ const store = multer.diskStorage({
 
 const up = multer({storage:store}).single('file');
 
-travel.get('/', travelCtrl.myList);
+travel.get('/:user_id', travelCtrl.myList);
 travel.post('/', up, travelCtrl.addTravel);
 travel.get('/:travel_id', travelCtrl.showTravel);
 travel.post('/:travel_id/daily/:day', upload, travelCtrl.writeSpot);

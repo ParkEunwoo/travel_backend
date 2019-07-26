@@ -5,7 +5,7 @@ const Travels = require('../../models/travels');
 const Spots = require('../../models/spots');
 
 exports.myList = async (req: express.Request, res: express.Response) => {
-    const { user_id } = req.body;
+    const { user_id } = req.params;
     
     console.log(req);
     await Travels.find({user_id}, (err: any, output:any) => {

@@ -5,7 +5,7 @@ const Travels = require('../../models/travels');
 const Spots = require('../../models/spots');
 
 exports.friendList = async (req: express.Request, res: express.Response) => {
-    const { user_id } = req.body;
+    const { user_id } = req.params;
     
     await Users.findOne({_id: user_id}, {friends: true}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
@@ -44,7 +44,15 @@ exports.deleteFriend = async (req: express.Request, res: express.Response) => {
 
 
 exports.friendsTravelList = async (req: express.Request, res: express.Response) => {
-    const { user_id, friends } = req.body;
+    const { user_id } = req.params;
+    let friends;
+    await Users.findOne({_id: user_id}, {friends: true}, (err: any, output:any) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else{
+            friends = output.data;
+        }
+    }).exec();
     
     await Travels.find({user_id:{$in:friends}}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
@@ -57,7 +65,7 @@ exports.friendsTravelList = async (req: express.Request, res: express.Response) 
 }
 
 exports.friendTravelList = async (req: express.Request, res: express.Response) => {
-    const { user_id } = req.body;
+
     const { friend } = req.params;
     
     await Travels.find({user_id: friend}, (err: any, output:any) => {
