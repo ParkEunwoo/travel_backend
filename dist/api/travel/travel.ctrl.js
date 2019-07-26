@@ -30,7 +30,7 @@ exports.addTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
         path: file.path,
         name: file.filename.split('.')[0],
         ext: file.filename.split('.')[1],
-        uri: 'https://pic-me-back.herokuapp.com/images/profile/' + file.filename
+        uri: 'https://pic-me-back.herokuapp.com/images/travel/' + file.filename
     };
     const { user_id, name, title, place, start_date, end_date, category } = req.body;
     console.log('user_id', user_id);
