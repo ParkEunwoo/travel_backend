@@ -11,7 +11,7 @@ const Image = new Schema({
 const Spots = new Schema({
     user_id: String,
     travel_id: String,
-    day: Number,
+    title: String,
     images: [Image],
     latitude: Number,
     longitude: Number,

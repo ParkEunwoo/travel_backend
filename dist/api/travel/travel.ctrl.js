@@ -99,12 +99,12 @@ exports.writeSpot = (req, res) => __awaiter(this, void 0, void 0, function* () {
             ext: value.filename.split('.')[1]
         };
     });
-    const { user_id, content, time, latitude, longitude } = req.body;
-    const { travel_id, day } = req.params;
+    const { user_id, title, content, time, latitude, longitude } = req.body;
+    const { travel_id } = req.params;
     yield Spots.create({
         user_id,
         travel_id,
-        day,
+        title,
         images,
         latitude,
         longitude,
@@ -121,7 +121,6 @@ exports.writeSpot = (req, res) => __awaiter(this, void 0, void 0, function* () {
     });
 });
 exports.showTravel = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const { user_id } = req.body;
     const { travel_id } = req.params;
     yield Spots.find({ travel_id }, (err, output) => {
         if (err)
@@ -131,7 +130,7 @@ exports.showTravel = (req, res) => __awaiter(this, void 0, void 0, function* () 
         else {
             res.status(200).json(output);
         }
-    }).sort({ day: 1, time: 1 }).exec();
+    }).sort({ time: 1 }).exec();
 });
 exports.modifySpot = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const files = req.files;
@@ -165,9 +164,9 @@ const files = [
             ext: value.filename.split('.')[1]
         };
     });
-    const { user_id, content, time, latitude, longitude } = req.body;
-    const { travel_id, day } = req.params;
-    yield Spots.findOneAndUpdate({ user_id, travel_id, day }, { images, latitude, longitude, time, content }, (err, output) => {
+    const { user_id, title, content, time, latitude, longitude } = req.body;
+    const { travel_id } = req.params;
+    yield Spots.findOneAndUpdate({ user_id, travel_id }, { images, title, latitude, longitude, time, content }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
         if (!output)
