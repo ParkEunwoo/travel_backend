@@ -103,6 +103,18 @@ exports.modifyProfile = async (req: any, res: express.Response) => {
 }
 
 
+exports.myInfo = async (req: express.Request, res: express.Response) => {
+    const { user_id } = req.params;
+    
+    await Users.findOne({user_id}, (err: any, output:any) => {
+        if(err) res.status(500).json({error: err});
+        if(!output) res.status(404).json({error: 'Not Found'});
+        else{
+            res.status(200).json(output);
+        }
+    }).exec();
+}
+
 exports.login = async (req: express.Request, res: express.Response) => {
     const { token } = req.body;
     

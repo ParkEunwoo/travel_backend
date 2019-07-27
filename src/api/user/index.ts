@@ -20,6 +20,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage }).single('file');
 
+user.get('/:user_id', userCtrl.myInfo);
 user.get('/:user_id/friends', userCtrl.friendList);
 user.post('/friends', userCtrl.addFriend);
 user.delete('/friends/:friend', userCtrl.deleteFriend);
