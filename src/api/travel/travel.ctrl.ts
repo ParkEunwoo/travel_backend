@@ -84,17 +84,18 @@ exports.writeSpot = async (req: any, res: express.Response) => {
             ext: "png"
         }
     ];*/
+    const { travel_id } = req.params;
     const images = files.map((value) => {
         return {
             path: value.path,
             name: value.filename.split('.')[0],
-            ext: value.filename.split('.')[1]
+            ext: value.filename.split('.')[1],
+            uri: 'https://pic-me-back.herokuapp.com/images/travel/'+travel_id+'/'+value.filename
         }
     });
     
     const { user_id, title, content, time, latitude, longitude } = req.body;
     
-    const { travel_id } = req.params;
     await Spots.create({
         user_id,
         travel_id,
