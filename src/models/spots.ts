@@ -13,7 +13,6 @@ const Spots = new Schema({
     user_id: String,
     travel_id: String,
     title: String,
-    day: Number,
     images: [Image],
     latitude: Number,
     longitude: Number,

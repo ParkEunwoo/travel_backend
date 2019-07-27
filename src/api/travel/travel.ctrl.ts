@@ -94,11 +94,10 @@ exports.writeSpot = async (req: any, res: express.Response) => {
     
     const { user_id, title, content, time, latitude, longitude } = req.body;
     
-    const { travel_id, day } = req.params;
+    const { travel_id } = req.params;
     await Spots.create({
         user_id,
         travel_id,
-        day,
         title,
         images,
         latitude,
@@ -123,7 +122,7 @@ exports.showTravel = async (req: express.Request, res: express.Response) => {
         else{
             res.status(200).json(output);
         }
-    }).sort({day: 1, time: 1}).exec();
+    }).sort({time: 1}).exec();
 }
 
 exports.modifySpot = async (req: any, res: express.Response) => {
@@ -161,9 +160,9 @@ const files = [
     
     const { user_id, title, content, time, latitude, longitude } = req.body;
 
-    const { travel_id, day } = req.params;
+    const { travel_id } = req.params;
 
-    await Spots.findOneAndUpdate({user_id, travel_id, day}, {images, title, latitude, longitude, time, content}, (err: any, output: any) => {
+    await Spots.findOneAndUpdate({user_id, travel_id}, {images, title, latitude, longitude, time, content}, (err: any, output: any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});
         else {
