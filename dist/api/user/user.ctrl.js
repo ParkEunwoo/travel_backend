@@ -102,6 +102,18 @@ exports.modifyProfile = (req, res) => __awaiter(this, void 0, void 0, function* 
         }
     }).exec();
 });
+exports.myInfo = (req, res) => __awaiter(this, void 0, void 0, function* () {
+    const { user_id } = req.params;
+    yield Users.findOne({ _id: user_id }, (err, output) => {
+        if (err)
+            res.status(500).json({ error: err });
+        if (!output)
+            res.status(404).json({ error: 'Not Found' });
+        else {
+            res.status(200).json(output);
+        }
+    }).exec();
+});
 exports.login = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const { token } = req.body;
     yield Users.findOne({ token }, (err, output) => {

@@ -92,15 +92,16 @@ exports.writeSpot = (req, res) => __awaiter(this, void 0, void 0, function* () {
                 ext: "png"
             }
         ];*/
+    const { travel_id } = req.params;
     const images = files.map((value) => {
         return {
             path: value.path,
             name: value.filename.split('.')[0],
-            ext: value.filename.split('.')[1]
+            ext: value.filename.split('.')[1],
+            uri: 'https://pic-me-back.herokuapp.com/images/travel/' + travel_id + '/' + value.filename
         };
     });
     const { user_id, title, content, time, latitude, longitude } = req.body;
-    const { travel_id } = req.params;
     yield Spots.create({
         user_id,
         travel_id,
