@@ -3,6 +3,7 @@ import * as fs from 'fs';
 
 const Travels = require('../../models/travels');
 const Spots = require('../../models/spots');
+const TouristSpot = require('../../models/touristspot');
 
 exports.myList = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.params;
@@ -252,4 +253,24 @@ exports.showCategoryTravel = async (req: express.Request, res: express.Response)
             res.status(200).json(output);
         }
     }).sort({day: 1, time: 1}).exec();
+}
+
+exports.touristSpot = async (req:express.Request, res: express.Response) => {
+    console.log(req.params)
+    const { latitude, longitude, latitudeDelta, longitudeDelta } = req.params;
+    const lat_gt = Number(latitude) - Number(latitudeDelta);
+    const lat_lt = Number(latitude) + Number(latitudeDelta);
+    const lng_gt = Number(longitude) - Number(longitudeDelta);
+    const lng_lt = Number(longitude) + Number(longitudeDelta);
+    console.log(lat_gt, lat_lt, lng_gt, lng_lt)
+    await TouristSpot.find({latitude:{$gt:lat_gt,$lt:lat_lt},longitude:{$gt:lng_gt,$lt:lng_lt}},
+        {name:true, latitude:true, longitude: true, phone: true},
+        (err:any, output: any)=>{
+            if(err) res.status(500).json({error: err});
+            if(!output) res.status(404).json({error: 'Not Found'});
+            else {
+                console.log(output)
+                res.status(200).json(output);
+            }
+    }).exec();
 }
