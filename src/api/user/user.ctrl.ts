@@ -9,7 +9,7 @@ exports.friendList = async (req: express.Request, res: express.Response) => {
     
     await Users.findOne({_id: user_id}, {friends: true}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: 'Not Found'});
+        if(!output) res.status(200).json({error: 'Not Found'});
         else{
             res.status(200).json(output);
         }
@@ -50,7 +50,7 @@ exports.friendsTravelList = async (req: express.Request, res: express.Response) 
         if(err) res.status(500).json({error: err});
         if(!output){
             console.log('aa')
-             res.status(404).json({error: 'Not Found'});}
+             res.status(200).json({error: 'Not Found'});}
         else{
             res.status(200).json(output);
         }
