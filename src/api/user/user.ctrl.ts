@@ -44,19 +44,13 @@ exports.deleteFriend = async (req: express.Request, res: express.Response) => {
 
 
 exports.friendsTravelList = async (req: express.Request, res: express.Response) => {
-    const { user_id } = req.params;
-    let friends;
-    await Users.findOne({_id: user_id}, {friends: true}, (err: any, output:any) => {
-        if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: 'Not Found'});
-        else{
-            friends = output.data;
-        }
-    }).exec();
-    
+    const { friends } = req.body;
+    console.log(friends)
     await Travels.find({user_id:{$in:friends}}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
-        if(!output) res.status(404).json({error: 'Not Found'});
+        if(!output){
+            console.log('aa')
+             res.status(404).json({error: 'Not Found'});}
         else{
             res.status(200).json(output);
         }

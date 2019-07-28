@@ -50,22 +50,15 @@ exports.deleteFriend = (req, res) => __awaiter(this, void 0, void 0, function* (
     }).exec();
 });
 exports.friendsTravelList = (req, res) => __awaiter(this, void 0, void 0, function* () {
-    const { user_id } = req.params;
-    let friends;
-    yield Users.findOne({ _id: user_id }, { friends: true }, (err, output) => {
-        if (err)
-            res.status(500).json({ error: err });
-        if (!output)
-            res.status(404).json({ error: 'Not Found' });
-        else {
-            friends = output.data;
-        }
-    }).exec();
+    const { friends } = req.body;
+    console.log(friends);
     yield Travels.find({ user_id: { $in: friends } }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
-        if (!output)
+        if (!output) {
+            console.log('aa');
             res.status(404).json({ error: 'Not Found' });
+        }
         else {
             res.status(200).json(output);
         }
