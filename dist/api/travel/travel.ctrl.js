@@ -267,7 +267,7 @@ exports.touristSpot = (req, res) => __awaiter(this, void 0, void 0, function* ()
         if (err)
             res.status(500).json({ error: err });
         if (!output)
-            res.status(404).json({ error: 'Not Found' });
+            res.status(200).json({ data: [] });
         else {
             console.log(output);
             res.status(200).json(output);

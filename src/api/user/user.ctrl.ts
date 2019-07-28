@@ -99,7 +99,7 @@ exports.modifyProfile = async (req: any, res: express.Response) => {
 
 exports.myInfo = async (req: express.Request, res: express.Response) => {
     const { user_id } = req.params;
-    
+    console.log(user_id)
     await Users.findOne({_id:user_id}, (err: any, output:any) => {
         if(err) res.status(500).json({error: err});
         if(!output) res.status(404).json({error: 'Not Found'});

@@ -267,7 +267,7 @@ exports.touristSpot = async (req:express.Request, res: express.Response) => {
         {name:true, latitude:true, longitude: true, phone: true},
         (err:any, output: any)=>{
             if(err) res.status(500).json({error: err});
-            if(!output) res.status(404).json({error: 'Not Found'});
+            if(!output) res.status(200).json({data: []});
             else {
                 console.log(output)
                 res.status(200).json(output);

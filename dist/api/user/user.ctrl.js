@@ -97,6 +97,7 @@ exports.modifyProfile = (req, res) => __awaiter(this, void 0, void 0, function* 
 });
 exports.myInfo = (req, res) => __awaiter(this, void 0, void 0, function* () {
     const { user_id } = req.params;
+    console.log(user_id);
     yield Users.findOne({ _id: user_id }, (err, output) => {
         if (err)
             res.status(500).json({ error: err });
