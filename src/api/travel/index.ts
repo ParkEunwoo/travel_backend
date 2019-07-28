@@ -38,5 +38,6 @@ travel.put('/:_id/like', travelCtrl.likeTravel);
 travel.delete('/:_id', travelCtrl.deleteTravel);
 travel.get('/category/:category', travelCtrl.categoryList);
 travel.get('/category/:category/:travel_id', travelCtrl.showCategoryTravel);
+travel.get('/tourist/spot/:latitude/:longitude/:latitudeDelta/:longitudeDelta', travelCtrl.touristSpot);
 
 module.exports = travel;
