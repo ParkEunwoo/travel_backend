@@ -18,3 +18,7 @@ Naver D2 CAMPUS FEST
 | 나의 일지 목록 보기 | GET | /api/travel | |
 | 일지 보기 | GET | /api/travel/:travel_id| |
 | 장소 추가하기 | POST | /api/travel/:travel_id | [images], title, content, time, latitude, longitude |
+| 장소 수정하기 | PUT | /api/travel/:trevel_id | 
+| 친구 목록 불러오기 | GET | /api/user/:user_id/friends | |
+| 친구가 다녀온 일지 목록 보기 | POST | /api/user/friends/travel | [friends] |
+| 주변 관광지 목록 가져오기 | GET | /api/travel/tourist/spot/:latitude/:longitude/:latitudeDelta/:longitudeDelta | |
