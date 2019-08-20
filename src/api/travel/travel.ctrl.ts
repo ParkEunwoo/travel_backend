@@ -270,7 +270,7 @@ exports.touristSpot = async (req:express.Request, res: express.Response) => {
             if(!output) res.status(200).json({data: []});
             else {
                 console.log(output)
-                res.status(200).json(output);
+                res.status(200).json(output);   
             }
     }).exec();
 }
